@@ -384,6 +384,7 @@ cdef class LinearVPTree:
             nodeid = seqids[k]
             vantage_seq = &(self.sequences.sequences.seqs[nodeid])
             result = align_func(profile, vantage_seq.seq.s, vantage_seq.seq.l, 12, 4)
+            # FIXME: See the other FIXME about the distance metric.
             distance = (5.0 * len_query + 5.0 * vantage_seq.seq.l
                         - 2.0 * parasail_result_get_score(result))
             parasail_result_free(result)
