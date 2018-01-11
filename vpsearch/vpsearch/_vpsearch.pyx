@@ -22,8 +22,8 @@ include 'parasail.pxi'
 cdef class SeqDB:
     cdef parasail_sequences_t *sequences
 
-    def __cinit__(self, char *filename):
-        self.sequences = parasail_sequences_from_file(filename)
+    def __cinit__(self, str filename):
+        self.sequences = parasail_sequences_from_file(filename.encode())
 
     def __dealloc__(self):
         if self.sequences != NULL:
@@ -42,7 +42,7 @@ cdef class SeqDB:
         cdef double match_percent
         cdef object result_id
 
-        func_id = '{}_{}_profile_16'.format(search_type, vectorization)
+        func_id = '{}_{}_profile_16'.format(search_type, vectorization).encode()
         align_func = parasail_lookup_pfunction(func_id)
         if align_func == NULL:
             raise KeyError('Failed to find {0!r}'.format(func_id))
@@ -65,7 +65,7 @@ cdef class SeqDB:
         if best_seq != NULL:
             # Try again with stats to get the number of matches.
             align_func = parasail_lookup_pfunction('{}_stats_{}_profile_16'.format(
-                search_type, vectorization))
+                search_type, vectorization).encode())
             result = align_func(profile, best_seq.seq.s, best_seq.seq.l,
                                 gap_open, gap_extend)
             result_id = best_seq.name.s
@@ -123,7 +123,7 @@ cpdef double scoredistance(query, ref, int gap_open=12, int gap_extend=4):
     elif isinstance(ref, unicode):
         rseq = ref.encode('ascii')
 
-    align_func = parasail_lookup_function('nw_scan_16')
+    align_func = parasail_lookup_function(b'nw_scan_16')
     result = align_func(qseq, len(qseq), rseq, len(rseq), gap_open, gap_extend,
                         &parasail_nuc44)
     # Score-based distance metric.
@@ -165,7 +165,7 @@ cpdef double matchpct(query, ref, int gap_open=12, int gap_extend=4):
     elif isinstance(ref, unicode):
         rseq = ref.encode('ascii')
 
-    align_func = parasail_lookup_function('nw_stats_scan_16')
+    align_func = parasail_lookup_function(b'nw_stats_scan_16')
     result = align_func(qseq, len(qseq), rseq, len(rseq), gap_open, gap_extend,
                         &parasail_nuc44)
     dist = (100.0 * parasail_result_get_matches(result)
@@ -257,7 +257,7 @@ cdef class MatchRecord:
         self.qlen = len(query)
         self.rlen = len(ref[1])
 
-        align_func = parasail_lookup_function('nw_stats_scan_16')
+        align_func = parasail_lookup_function(b'nw_stats_scan_16')
         result = align_func(query, len(query), rseq, len(rseq), 12, 4,
                             &parasail_nuc44)
         self.score = parasail_result_get_score(result)
@@ -276,12 +276,12 @@ cdef class MatchRecord:
 
     def __str__(self):
         # FIXME: The last one ought to be bit_score, but eh.
-        return (b'{0.seqid}\t{0.matchpct:.2f}\t{0.length}\t{0.mismatches}\t'
-                b'{0.gap_openings}\t1\t{0.qlen}\t1\t{0.rlen}\t{0.e_value:g}\t'
-                b'{0.score}'.format(self))
+        return ('{1}\t{0.matchpct:.2f}\t{0.length}\t{0.mismatches}\t'
+                '{0.gap_openings}\t1\t{0.qlen}\t1\t{0.rlen}\t{0.e_value:g}\t'
+                '{0.score}'.format(self, self.seqid.decode()))
 
     def __repr__(self):
-        return b'<{0.__name__}: {1.seqid} {0.matchpct:f}>'.format(type(self), self)
+        return '<{0.__name__}: {1.seqid} {0.matchpct:f}>'.format(type(self), self)
 
 
 cdef class LinearVPTree:
@@ -361,7 +361,7 @@ cdef class LinearVPTree:
         inside_ptr = self.inside_ptr
         outside_ptr = self.outside_ptr
 
-        func_id = 'nw_scan_profile_16'
+        func_id = b'nw_scan_profile_16'
         align_func = parasail_lookup_pfunction(func_id)
         if align_func == NULL:
             raise KeyError('Failed to find {0!r}'.format(func_id))

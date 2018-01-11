@@ -54,7 +54,7 @@ def query(database, query, number):
     tree = LinearVPTree.fromdir(database)
     for qid, q in seqs:
         for mrec in tree.get_nearest_neighbors(q, number):
-            click.echo(u'{0}\t{1}'.format(qid, mrec))
+            click.echo(u'{0}\t{1}'.format(qid.decode(), mrec))
 
 
 if __name__ == '__main__':
