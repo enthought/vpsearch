@@ -10,9 +10,13 @@ import numpy as np
 from Cython.Distutils import build_ext
 
 
-# NOTE: Set these appropriately.
-parasail_include_dir = '/usr/local/include'
-parasail_library_dir = '/usr/local/lib'
+# NOTE: Set these environment variables appropriately.
+parasail_include_dir = os.environ.get(
+    'PARASAIL_INCLUDE_DIR', '/usr/local/include'
+)
+parasail_library_dir = os.environ.get(
+    'PARASAIL_LIBRARY_DIR', '/usr/local/lib'
+)
 
 setup(
     name='vpsearch',
