@@ -18,8 +18,8 @@ cdef extern from "fastqueue.hpp":
     cdef cppclass FastNeighborQueue:
         FastNeighborQueue()
         FastNeighborQueue(size_t) except +
-        void push_distance(float, size_t)
-        float get_max_distance()
+        void push_distance(float, size_t) nogil
+        float get_max_distance() nogil
 
         cppclass iterator:
             pair[float, size_t] operator*()
@@ -363,7 +363,7 @@ cdef class LinearVPTree:
             kwds[attr] = getattr(self, attr)
         np.savez(treefile, **kwds)
 
-    #@cython.boundscheck(False)
+    @cython.boundscheck(False)
     def get_nearest_neighbors(self, bytes query, size=1):
         cdef FastNeighborQueue neighbors
         cdef cnp.int64_t[::1] seqids, inside_ptr, outside_ptr
@@ -395,38 +395,41 @@ cdef class LinearVPTree:
 
         cdef cpp_stack[cnp.int64_t] stack = cpp_stack[cnp.int64_t]()
         stack.push(0)
-        while not stack.empty():
-            # Depth-first traversal.
-            k = stack.top()
-            stack.pop()
-            if k < 0:
-                # -1 is the sentinel value.
-                continue
-            nodeid = seqids[k]
-            vantage_seq = &(self.sequences.sequences.seqs[nodeid])
-            result = align_func(profile, vantage_seq.seq.s, vantage_seq.seq.l, 12, 4)
-            # FIXME: See the other FIXME about the distance metric.
-            distance = (5.0 * len_query + 5.0 * vantage_seq.seq.l
-                        - 2.0 * parasail_result_get_score(result))
-            parasail_result_free(result)
-            if distance < tau:
-                neighbors.push_distance(distance, nodeid)
-                tau = neighbors.get_max_distance()
-            k_in = inside_ptr[k]
-            k_out = outside_ptr[k]
-            mu = mus[k]
-            if distance < mu:
-                # With the depth-first traversal, we will first search the last
-                # item, so append in reverse order of how we want to traverse.
-                if distance >= mu - tau:
-                    stack.push(k_out)
-                if distance <= mu + tau:
-                    stack.push(k_in)
-            else:
-                if distance <= mu + tau:
-                    stack.push(k_in)
-                if distance >= mu - tau:
-                    stack.push(k_out)
+
+        with nogil:
+            while not stack.empty():
+                # Depth-first traversal.
+                k = stack.top()
+                stack.pop()
+                if k < 0:
+                    # -1 is the sentinel value.
+                    continue
+                nodeid = seqids[k]
+                vantage_seq = &(self.sequences.sequences.seqs[nodeid])
+                result = align_func(profile, vantage_seq.seq.s, vantage_seq.seq.l, 12, 4)
+                # FIXME: See the other FIXME about the distance metric.
+                distance = (5.0 * len_query + 5.0 * vantage_seq.seq.l
+                            - 2.0 * parasail_result_get_score(result))
+                parasail_result_free(result)
+                if distance < tau:
+                    neighbors.push_distance(distance, nodeid)
+                    tau = neighbors.get_max_distance()
+                k_in = inside_ptr[k]
+                k_out = outside_ptr[k]
+                mu = mus[k]
+                if distance < mu:
+                    # With the depth-first traversal, we will first search the last
+                    # item, so append in reverse order of how we want to traverse.
+                    if distance >= mu - tau:
+                        stack.push(k_out)
+                    if distance <= mu + tau:
+                        stack.push(k_in)
+                else:
+                    if distance <= mu + tau:
+                        stack.push(k_in)
+                    if distance >= mu - tau:
+                        stack.push(k_out)
+
         parasail_profile_free(profile)
         matches = []
         cdef FastNeighborQueue.iterator it = neighbors.begin()
