@@ -1,6 +1,7 @@
 cimport cython
 from libc.stddef cimport size_t
 from libcpp.pair cimport pair
+from libcpp.stack cimport stack as cpp_stack
 from cpython.bytes cimport PyBytes_FromStringAndSize
 
 from cython.operator cimport dereference as deref, preincrement as inc
@@ -391,13 +392,13 @@ cdef class LinearVPTree:
 
         neighbors = FastNeighborQueue(size)
         tau = neighbors.get_max_distance()
-        # FIXME: We use a deque here because it was the easiest. We do want to
-        # `with nogil:` this loop, though, so we should replace this with
-        # a pure C/C++ datastructure. It's the only Python object in this loop.
-        stack = deque([0])
-        while stack:
+
+        cdef cpp_stack[cnp.int64_t] stack = cpp_stack[cnp.int64_t]()
+        stack.push(0)
+        while not stack.empty():
             # Depth-first traversal.
-            k = stack.pop()
+            k = stack.top()
+            stack.pop()
             if k < 0:
                 # -1 is the sentinel value.
                 continue
@@ -418,14 +419,14 @@ cdef class LinearVPTree:
                 # With the depth-first traversal, we will first search the last
                 # item, so append in reverse order of how we want to traverse.
                 if distance >= mu - tau:
-                    stack.append(k_out)
+                    stack.push(k_out)
                 if distance <= mu + tau:
-                    stack.append(k_in)
+                    stack.push(k_in)
             else:
                 if distance <= mu + tau:
-                    stack.append(k_in)
+                    stack.push(k_in)
                 if distance >= mu - tau:
-                    stack.append(k_out)
+                    stack.push(k_out)
         parasail_profile_free(profile)
         matches = []
         cdef FastNeighborQueue.iterator it = neighbors.begin()
