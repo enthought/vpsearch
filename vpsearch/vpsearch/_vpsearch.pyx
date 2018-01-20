@@ -1,6 +1,9 @@
 cimport cython
 from libc.stddef cimport size_t
+from libcpp.pair cimport pair
 from cpython.bytes cimport PyBytes_FromStringAndSize
+
+from cython.operator cimport dereference as deref, preincrement as inc
 
 from collections import deque
 import os
@@ -9,6 +12,22 @@ cimport numpy as cnp
 import numpy as np
 
 include 'parasail.pxi'
+
+cdef extern from "fastqueue.hpp":
+    cdef cppclass FastNeighborQueue:
+        FastNeighborQueue()
+        FastNeighborQueue(size_t) except +
+        void push_distance(float, size_t)
+        float get_max_distance()
+
+        cppclass iterator:
+            pair[float, size_t] operator*()
+            iterator operator++()
+            bint operator==(iterator)
+            bint operator!=(iterator)
+
+        iterator begin()
+        iterator end()
 
 
 # The default scoring parameters were taken from fasta-36.3.7
@@ -196,47 +215,48 @@ cdef class NeighborQueue:
         return len(self.queue) == self.size
 
 
-cdef class FastQueue:
-    cdef cnp.float32_t[::1] distances
-    cdef cnp.int64_t[::1] indices
-    cdef cnp.int64_t i_argmax
-    cdef public cnp.float32_t max_distance
-    cdef public cnp.int64_t size
+# cdef class FastQueue:
+#     cdef cnp.float32_t[::1] distances
+#     cdef cnp.int64_t[::1] indices
+#     cdef cnp.int64_t i_argmax
+#     cdef public cnp.float32_t max_distance
+#     cdef public cnp.int64_t size
 
-    def __init__(self, size):
-        if size <= 0:
-            raise ValueError("expected positive size")
-        self.size = size
-        self.distances = np.full(size, np.inf, dtype=np.float32)
-        self.indices = np.full(size, -1, dtype=np.int64)
-        self.i_argmax = 0
-        self.max_distance = self.distances[0]
+#     def __init__(self, size):
+#         if size <= 0:
+#             raise ValueError("expected positive size")
+#         self.size = size
+#         self.distances = np.full(size, np.inf, dtype=np.float32)
+#         self.indices = np.full(size, -1, dtype=np.int64)
+#         self.i_argmax = 0
+#         self.max_distance = self.distances[0]
 
-    @cython.boundscheck(False)
-    cdef void push(self, float distance, cnp.int64_t index):
-        cdef long i
+#     @cython.boundscheck(False)
+#     cdef void push(self, float distance, cnp.int64_t index):
+#         cdef long i
 
-        if distance < self.distances[self.i_argmax]:
-            self.distances[self.i_argmax] = distance
-            self.indices[self.i_argmax] = index
-            self._fix_argmax()
+#         if distance < self.distances[self.i_argmax]:
+#             self.distances[self.i_argmax] = distance
+#             self.indices[self.i_argmax] = index
+#             self._fix_argmax()
 
-    cdef _fix_argmax(self):
-        cdef long i, i_argmax
-        cdef float d
+#     cdef _fix_argmax(self):
+#         cdef long i, i_argmax
+#         cdef float d
 
-        i_argmax = 0
-        d = self.distances[0]
-        for i in range(1, self.size):
-            if self.distances[i] > d:
-                i_argmax = i
-                d = self.distances[i]
-        self.i_argmax = i_argmax
-        self.max_distance = d
+#         i_argmax = 0
+#         d = self.distances[0]
+#         for i in range(1, self.size):
+#             if self.distances[i] > d:
+#                 i_argmax = i
+#                 d = self.distances[i]
+#         self.i_argmax = i_argmax
+#         self.max_distance = d
 
-    def __iter__(self):
-        for i in range(self.size):
-            yield self.distances[i], self.indices[i]
+#     def __iter__(self):
+#         for i in range(self.size):
+#             yield self.distances[i], self.indices[i]
+
 
 
 cdef class MatchRecord:
@@ -344,7 +364,7 @@ cdef class LinearVPTree:
 
     #@cython.boundscheck(False)
     def get_nearest_neighbors(self, bytes query, size=1):
-        cdef FastQueue neighbors
+        cdef FastNeighborQueue neighbors
         cdef cnp.int64_t[::1] seqids, inside_ptr, outside_ptr
         cdef float[::1] mus
         cdef cnp.int64_t nodeid
@@ -369,8 +389,8 @@ cdef class LinearVPTree:
         profile = parasail_profile_create_stats_16(
             query, len_query, &parasail_nuc44)
 
-        neighbors = FastQueue(size)
-        tau = neighbors.max_distance
+        neighbors = FastNeighborQueue(size)
+        tau = neighbors.get_max_distance()
         # FIXME: We use a deque here because it was the easiest. We do want to
         # `with nogil:` this loop, though, so we should replace this with
         # a pure C/C++ datastructure. It's the only Python object in this loop.
@@ -389,8 +409,8 @@ cdef class LinearVPTree:
                         - 2.0 * parasail_result_get_score(result))
             parasail_result_free(result)
             if distance < tau:
-                neighbors.push(distance, nodeid)
-                tau = neighbors.max_distance
+                neighbors.push_distance(distance, nodeid)
+                tau = neighbors.get_max_distance()
             k_in = inside_ptr[k]
             k_out = outside_ptr[k]
             mu = mus[k]
@@ -408,9 +428,14 @@ cdef class LinearVPTree:
                     stack.append(k_out)
         parasail_profile_free(profile)
         matches = []
-        for dist, idx in neighbors:
-            seq = self.sequences[idx]
+        cdef FastNeighborQueue.iterator it = neighbors.begin()
+        while it != neighbors.end():
+            seq = self.sequences[deref(it).second]
             matches.append(MatchRecord.align(query, seq))
+            inc(it)
+        # for dist, idx in neighbors:
+        #     seq = self.sequences[idx]
+        #     matches.append(MatchRecord.align(query, seq))
         matches.sort(key=lambda r: -r.matchpct)
         return matches
 

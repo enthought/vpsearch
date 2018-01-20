@@ -29,6 +29,8 @@ setup(
                   include_dirs=[np.get_include(), parasail_include_dir, 'vpsearch'],
                   library_dirs=[parasail_library_dir],
                   libraries=['parasail'],
+                  language='c++',
+                  extra_compile_args=['-std=c++11'],
         ),
     ],
     license="Proprietary",
