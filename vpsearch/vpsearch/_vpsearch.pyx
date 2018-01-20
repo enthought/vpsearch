@@ -216,50 +216,6 @@ cdef class NeighborQueue:
         return len(self.queue) == self.size
 
 
-# cdef class FastQueue:
-#     cdef cnp.float32_t[::1] distances
-#     cdef cnp.int64_t[::1] indices
-#     cdef cnp.int64_t i_argmax
-#     cdef public cnp.float32_t max_distance
-#     cdef public cnp.int64_t size
-
-#     def __init__(self, size):
-#         if size <= 0:
-#             raise ValueError("expected positive size")
-#         self.size = size
-#         self.distances = np.full(size, np.inf, dtype=np.float32)
-#         self.indices = np.full(size, -1, dtype=np.int64)
-#         self.i_argmax = 0
-#         self.max_distance = self.distances[0]
-
-#     @cython.boundscheck(False)
-#     cdef void push(self, float distance, cnp.int64_t index):
-#         cdef long i
-
-#         if distance < self.distances[self.i_argmax]:
-#             self.distances[self.i_argmax] = distance
-#             self.indices[self.i_argmax] = index
-#             self._fix_argmax()
-
-#     cdef _fix_argmax(self):
-#         cdef long i, i_argmax
-#         cdef float d
-
-#         i_argmax = 0
-#         d = self.distances[0]
-#         for i in range(1, self.size):
-#             if self.distances[i] > d:
-#                 i_argmax = i
-#                 d = self.distances[i]
-#         self.i_argmax = i_argmax
-#         self.max_distance = d
-
-#     def __iter__(self):
-#         for i in range(self.size):
-#             yield self.distances[i], self.indices[i]
-
-
-
 cdef class MatchRecord:
     cdef public bytes seqid
     cdef public double matchpct, e_value, bit_score, distance
