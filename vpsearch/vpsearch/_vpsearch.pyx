@@ -15,10 +15,10 @@ import numpy as np
 include 'parasail.pxi'
 
 cdef extern from "fastqueue.hpp":
-    cdef cppclass FastNeighborQueue:
-        FastNeighborQueue()
-        FastNeighborQueue(size_t) except +
-        void push_distance(float, size_t) nogil
+    cdef cppclass FastQueue:
+        FastQueue()
+        FastQueue(size_t) except +
+        void push(float, size_t) nogil
         float get_max_distance() nogil
 
         cppclass iterator:
@@ -321,7 +321,7 @@ cdef class LinearVPTree:
 
     @cython.boundscheck(False)
     def get_nearest_neighbors(self, bytes query, size=1):
-        cdef FastNeighborQueue neighbors
+        cdef FastQueue neighbors
         cdef cnp.int64_t[::1] seqids, inside_ptr, outside_ptr
         cdef float[::1] mus
         cdef cnp.int64_t nodeid
@@ -346,7 +346,7 @@ cdef class LinearVPTree:
         profile = parasail_profile_create_stats_16(
             query, len_query, &parasail_nuc44)
 
-        neighbors = FastNeighborQueue(size)
+        neighbors = FastQueue(size)
         tau = neighbors.get_max_distance()
 
         cdef cpp_stack[cnp.int64_t] stack = cpp_stack[cnp.int64_t]()
@@ -368,7 +368,7 @@ cdef class LinearVPTree:
                             - 2.0 * parasail_result_get_score(result))
                 parasail_result_free(result)
                 if distance < tau:
-                    neighbors.push_distance(distance, nodeid)
+                    neighbors.push(distance, nodeid)
                     tau = neighbors.get_max_distance()
                 k_in = inside_ptr[k]
                 k_out = outside_ptr[k]
@@ -388,7 +388,7 @@ cdef class LinearVPTree:
 
         parasail_profile_free(profile)
         matches = []
-        cdef FastNeighborQueue.iterator it = neighbors.begin()
+        cdef FastQueue.iterator it = neighbors.begin()
         while it != neighbors.end():
             seq = self.sequences[deref(it).second]
             matches.append(MatchRecord.align(query, seq))

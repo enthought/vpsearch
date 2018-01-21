@@ -21,15 +21,15 @@ public:
 };
 
 
-class FastNeighborQueue
+class FastQueue
 {
 public:
-    // Dummy nullary constructor just to keep Cython happy...
-    FastNeighborQueue() {}
-    FastNeighborQueue(size_t size) : size(size) {}
+    FastQueue() {}
+    FastQueue(size_t size) : size(size) {}
 
-    void push(const Neighbor& element) 
+    void push(float distance, size_t index)
     {
+        Neighbor element(distance, index);
         if (elements.size() < size) {
             elements.push_back(element);
             max_el = elements.begin();
@@ -41,22 +41,12 @@ public:
         }
     }
     
-    void push_distance(float distance, size_t index)
-    {
-        push(Neighbor(distance, index));
-    }
-
     float get_max_distance() const
     {
-        if (elements.empty()) {
-            return INF;
-        } else {
-            return max_el->first;
-        }
+        return elements.empty() ? INF : max_el->first;
     }
     
     typedef typename std::vector<Neighbor>::iterator iterator;
-    // typedef typename std::vector<Neighbor>::const_iterator const_iterator;
     
     iterator begin() noexcept
     {
