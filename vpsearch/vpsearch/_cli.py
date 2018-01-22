@@ -1,4 +1,5 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from collections import OrderedDict
+from concurrent.futures import ThreadPoolExecutor
 import os
 import shutil
 
@@ -48,27 +49,27 @@ def build(sequences, output, force):
 @click.argument('database')
 @click.argument('query')
 @click.option('-n', '--number', default=4)
-@click.option('-j', '--num-threads', default=0,
+@click.option('-j', '--num-threads', default=1,
               help=("Number of threads to use for parallel lookup. "
-                    "If this is 0, the lookup is done serially."))
+                    "The default is to use 1 thread, i.e. to do the "
+                    "lookup serially."))
 def query(database, query, number, num_threads):
     """ Query a built database for sequences.
     """
     seqs = [(s[0][1], s[1]) for s in SeqDB(query)]
     tree = LinearVPTree.fromdir(database)
-    if num_threads == 0:
+    if num_threads <= 1:
         for qid, q in seqs:
             for mrec in tree.get_nearest_neighbors(q, number):
                 click.echo(u'{0}\t{1}'.format(qid.decode(), mrec))
     else:
-        future_to_qid = {}
+        future_to_qid = OrderedDict()
         with ThreadPoolExecutor(max_workers=num_threads) as executor:
             for qid, q in seqs:
                 future = \
                     executor.submit(tree.get_nearest_neighbors, q, number)
                 future_to_qid[future] = qid.decode()
-            for future in as_completed(future_to_qid):
-                qid = future_to_qid[future]
+            for future, qid in future_to_qid.items():
                 for mrec in future.result():
                     click.echo(u'{0}\t{1}'.format(qid, mrec))
 
