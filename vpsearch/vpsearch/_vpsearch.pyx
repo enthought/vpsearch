@@ -17,7 +17,7 @@ include 'parasail.pxi'
 cdef extern from "fastqueue.hpp":
     cdef cppclass FastQueue:
         FastQueue()
-        FastQueue(size_t) except +
+        FastQueue(size_t)
         void push(float, size_t) nogil
         float get_max_distance() nogil
 
@@ -393,9 +393,6 @@ cdef class LinearVPTree:
             seq = self.sequences[deref(it).second]
             matches.append(MatchRecord.align(query, seq))
             inc(it)
-        # for dist, idx in neighbors:
-        #     seq = self.sequences[idx]
-        #     matches.append(MatchRecord.align(query, seq))
         matches.sort(key=lambda r: -r.matchpct)
         return matches
 
