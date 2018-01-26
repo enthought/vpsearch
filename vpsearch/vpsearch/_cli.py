@@ -1,5 +1,5 @@
-from collections import OrderedDict
 from concurrent.futures import ThreadPoolExecutor
+from itertools import repeat
 import os
 import shutil
 
@@ -56,21 +56,24 @@ def build(sequences, output, force):
 def query(database, query, number, num_threads):
     """ Query a built database for sequences.
     """
-    seqs = [(s[0][1], s[1]) for s in SeqDB(query)]
+    qids = []
+    qs = []
+    for s in SeqDB(query):
+        qids.append(s[0][1].decode())
+        qs.append(s[1])
+
     tree = LinearVPTree.fromdir(database)
     if num_threads <= 1:
-        for qid, q in seqs:
+        for qid, q in zip(qids, qs):
             for mrec in tree.get_nearest_neighbors(q, number):
-                click.echo(u'{0}\t{1}'.format(qid.decode(), mrec))
+                click.echo(u'{0}\t{1}'.format(qid, mrec))
     else:
-        future_to_qid = OrderedDict()
         with ThreadPoolExecutor(max_workers=num_threads) as executor:
-            for qid, q in seqs:
-                future = \
-                    executor.submit(tree.get_nearest_neighbors, q, number)
-                future_to_qid[future] = qid.decode()
-            for future, qid in future_to_qid.items():
-                for mrec in future.result():
+            mrecs_all = executor.map(
+                tree.get_nearest_neighbors, qs, repeat(number)
+            )
+            for qid, mrecs in zip(qids, mrecs_all):
+                for mrec in mrecs:
                     click.echo(u'{0}\t{1}'.format(qid, mrec))
 
 
