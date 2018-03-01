@@ -43,7 +43,7 @@ public:
     
     float get_max_distance() const
     {
-        return elements.empty() ? INF : max_el->first;
+        return (elements.size() < size) ? INF : max_el->first;
     }
     
     typedef typename std::vector<Neighbor>::iterator iterator;
