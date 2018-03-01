@@ -54,7 +54,8 @@ cdef class SeqDB:
                         vectorization='scan', int gap_open=12,
                         int gap_extend=4):
         cdef parasail_profile_t* profile
-        cdef int i, best_score, current_score
+        cdef size_t i
+        cdef int best_score, current_score
         cdef parasail_sequence_t* best_seq = NULL
         cdef parasail_sequence_t* current_seq
         cdef parasail_pfunction_t* align_func = NULL
