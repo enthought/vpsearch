@@ -38,6 +38,14 @@ cdef extern from "fastqueue.hpp":
 #  gap_extend = -4
 
 
+cpdef int score(char* seq):
+    cdef const parasail_matrix_t *matrix = &parasail_nuc44
+    cdef int s = 0
+    cdef char ch
+    for ch in seq:
+        s += matrix.matrix[(matrix.size + 1) * matrix.mapper[<size_t>ch]]
+    return s
+
 
 cdef class SeqDB:
     cdef parasail_sequences_t *sequences

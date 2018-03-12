@@ -4,8 +4,9 @@ cdef extern from "parasail.h":
         pass
 
     ctypedef struct parasail_matrix_t:
-        # Keep opaque
-        pass
+        int *matrix
+        int *mapper
+        int size
 
     ctypedef struct parasail_profile_t:
         # Keep opaque
