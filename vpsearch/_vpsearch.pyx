@@ -38,12 +38,12 @@ cdef extern from "fastqueue.hpp":
 #  gap_extend = -4
 
 
-cpdef int score(char* seq):
+cpdef int score(char* seq, size_t length) nogil:
     cdef const parasail_matrix_t *matrix = &parasail_nuc44
     cdef int s = 0
-    cdef char ch
-    for ch in seq:
-        s += matrix.matrix[(matrix.size + 1) * matrix.mapper[<size_t>ch]]
+    cdef size_t i
+    for i in range(length):
+        s += matrix.matrix[(matrix.size + 1) * matrix.mapper[<size_t>seq[i]]]
     return s
 
 
@@ -156,16 +156,8 @@ cpdef double scoredistance(query, ref, int gap_open=12, int gap_extend=4):
     result = align_func(qseq, len(qseq), rseq, len(rseq), gap_open, gap_extend,
                         &parasail_nuc44)
     # Score-based distance metric.
-    # FIXME: properly speaking, the distance metric is constructed from the
-    # alignment score function like so:
     #   d(q, r) = score(q, q) + score(r, r) - 2*score(q, r)
-    # The following is only strictly valid if there are no ambiguous nucleotide
-    # codes in either sequence, because then the self-aligned scores won't be
-    # just 5*length. We do have ambiguous sequences in our database, so we
-    # ought to fix this. It will likely be faster to loop through the sequence
-    # and sum up the weights for each base rather than to actually call
-    # `align_func(qseq, qseq)` etc.
-    dist = (5.0 * len(qseq) + 5.0 * len(rseq)
+    dist = (score(qseq, len(qseq)) + score(rseq, len(rseq))
             - 2.0 * parasail_result_get_score(result))
     parasail_result_free(result)
     return dist
@@ -247,7 +239,8 @@ cdef class MatchRecord:
         result = align_func(query, len(query), rseq, len(rseq), 12, 4,
                             &parasail_nuc44)
         self.score = parasail_result_get_score(result)
-        self.distance = 5.0 * self.qlen + 5.0 * self.rlen - 2.0 * self.score
+        self.distance = (score(query, self.qlen) + score(rseq, self.rlen)
+            - 2.0 * self.score)
         self.length = parasail_result_get_length(result)
         self.matches = parasail_result_get_matches(result)
         self.matchpct = (100.0 * <float>self.matches / self.length)
@@ -341,6 +334,7 @@ cdef class LinearVPTree:
         cdef parasail_pfunction_t* align_func = NULL
         cdef parasail_sequence_t* vantage_seq
         cdef parasail_result_t* result
+        cdef char* c_query = <char*> query
 
         seqids = self.seqids
         mus = self.mus
@@ -371,9 +365,11 @@ cdef class LinearVPTree:
                     continue
                 nodeid = seqids[k]
                 vantage_seq = &(self.sequences.sequences.seqs[nodeid])
-                result = align_func(profile, vantage_seq.seq.s, vantage_seq.seq.l, 12, 4)
-                # FIXME: See the other FIXME about the distance metric.
-                distance = (5.0 * len_query + 5.0 * vantage_seq.seq.l
+                result = align_func(
+                    profile, vantage_seq.seq.s, vantage_seq.seq.l, 12, 4
+                )
+                distance = (score(c_query, len_query)
+                            + score(vantage_seq.seq.s, vantage_seq.seq.l)
                             - 2.0 * parasail_result_get_score(result))
                 parasail_result_free(result)
                 if distance < tau:

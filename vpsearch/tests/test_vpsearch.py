@@ -10,7 +10,7 @@ class TestCase(unittest.TestCase):
         expected_score = 20
 
         # When
-        seqscore = score(seq)
+        seqscore = score(seq, len(seq))
 
         # Then
         self.assertEqual(expected_score, seqscore)
@@ -21,7 +21,7 @@ class TestCase(unittest.TestCase):
         expected_score = 5
 
         # When
-        seqscore = score(seq)
+        seqscore = score(seq, len(seq))
 
         # Then
         self.assertEqual(expected_score, seqscore)
@@ -32,7 +32,7 @@ class TestCase(unittest.TestCase):
         expected_score = -1
 
         # When
-        seqscore = score(seq)
+        seqscore = score(seq, len(seq))
 
         # Then
         self.assertEqual(expected_score, seqscore)
@@ -43,7 +43,7 @@ class TestCase(unittest.TestCase):
         expected_score = 19
 
         # When
-        seqscore = score(seq)
+        seqscore = score(seq, len(seq))
 
         # Then
         self.assertEqual(expected_score, seqscore)
