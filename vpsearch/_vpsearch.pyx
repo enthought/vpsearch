@@ -38,7 +38,16 @@ cdef extern from "fastqueue.hpp":
 #  gap_extend = -4
 
 
-cpdef int score(char* seq, size_t length) nogil:
+cpdef int self_aligned_score(char* seq, size_t length) nogil:
+    """
+    Align sequence to itself and return the alignment score.
+
+    This method allows seq to contain ambiguous nucleotides and uses the nuc44
+    substitution matrix.
+
+    Match score (unambiguous character): 5
+    Match score (ambiguous character): -1
+    """
     cdef const parasail_matrix_t *matrix = &parasail_nuc44
     cdef int s = 0
     cdef size_t i
@@ -157,8 +166,10 @@ cpdef double scoredistance(query, ref, int gap_open=12, int gap_extend=4):
                         &parasail_nuc44)
     # Score-based distance metric.
     #   d(q, r) = score(q, q) + score(r, r) - 2*score(q, r)
-    dist = (score(qseq, len(qseq)) + score(rseq, len(rseq))
-            - 2.0 * parasail_result_get_score(result))
+    dist = (
+        self_aligned_score(qseq, len(qseq))
+        + self_aligned_score(rseq, len(rseq))
+        - 2.0 * parasail_result_get_score(result))
     parasail_result_free(result)
     return dist
 
@@ -239,7 +250,9 @@ cdef class MatchRecord:
         result = align_func(query, len(query), rseq, len(rseq), 12, 4,
                             &parasail_nuc44)
         self.score = parasail_result_get_score(result)
-        self.distance = (score(query, self.qlen) + score(rseq, self.rlen)
+        self.distance = (
+            self_aligned_score(query, self.qlen)
+            + self_aligned_score(rseq, self.rlen)
             - 2.0 * self.score)
         self.length = parasail_result_get_length(result)
         self.matches = parasail_result_get_matches(result)
@@ -368,9 +381,10 @@ cdef class LinearVPTree:
                 result = align_func(
                     profile, vantage_seq.seq.s, vantage_seq.seq.l, 12, 4
                 )
-                distance = (score(c_query, len_query)
-                            + score(vantage_seq.seq.s, vantage_seq.seq.l)
-                            - 2.0 * parasail_result_get_score(result))
+                distance = (
+                    self_aligned_score(c_query, len_query)
+                    + self_aligned_score(vantage_seq.seq.s, vantage_seq.seq.l)
+                    - 2.0 * parasail_result_get_score(result))
                 parasail_result_free(result)
                 if distance < tau:
                     neighbors.push(distance, nodeid)
