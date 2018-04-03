@@ -266,11 +266,25 @@ cdef class MatchRecord:
         parasail_result_free(result)
         return self
 
+    def to_tuple(self):
+        return (
+            self.seqid.decode(),
+            self.matchpct,
+            self.length,
+            self.mismatches,
+            self.gap_openings,
+            1,
+            self.qlen,
+            1,
+            self.rlen,
+            self.e_value,
+            self.score,
+        )
+
     def __str__(self):
         # FIXME: The last one ought to be bit_score, but eh.
-        return ('{1}\t{0.matchpct:.2f}\t{0.length}\t{0.mismatches}\t'
-                '{0.gap_openings}\t1\t{0.qlen}\t1\t{0.rlen}\t{0.e_value:g}\t'
-                '{0.score}'.format(self, self.seqid.decode()))
+        fmt = '{}\t{:.2f}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{:g}\t{}'
+        return fmt.format(*self.to_tuple())
 
     def __repr__(self):
         return '<{0.__name__}: {1.seqid} {0.matchpct:f}>'.format(type(self), self)
