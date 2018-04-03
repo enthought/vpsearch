@@ -31,6 +31,29 @@ cdef extern from "fastqueue.hpp":
         iterator end()
 
 
+cdef parasail_matrix_t* _create_modified_nuc44():
+    """ Create a modified version of the nuc44 substitution matrix.
+
+    The modified version has +1 on the diagonal for ambiguous nucleotides
+    (compared to the original nuc44, which has -1), but is otherwise the
+    same as nuc44. This modification is necessary for the alignment
+    distance to be a true distance metric, otherwise one could have e.g.
+    d(A, N) == 0.
+
+    See GH # 263 for more details.
+
+    """
+    cdef parasail_matrix_t* mod_nuc44
+    cdef size_t i
+
+    mod_nuc44 = parasail_matrix_copy(&parasail_nuc44)
+    for i in range(4, 16):
+        parasail_matrix_set_value(mod_nuc44, i, i, 1)
+    return mod_nuc44
+
+cdef parasail_matrix_t MOD_NUC44 = deref(_create_modified_nuc44())
+
+
 # The default scoring parameters were taken from fasta-36.3.7
 #  match = +5
 #  mismath = -4
@@ -48,7 +71,7 @@ cpdef int self_aligned_score(char* seq, size_t length) nogil:
     Match score (unambiguous character): 5
     Match score (ambiguous character): -1
     """
-    cdef const parasail_matrix_t *matrix = &parasail_nuc44
+    cdef const parasail_matrix_t *matrix = &MOD_NUC44
     cdef int s = 0
     cdef size_t i
     for i in range(length):
@@ -86,7 +109,7 @@ cdef class SeqDB:
             raise KeyError('Failed to find {0!r}'.format(func_id))
 
         profile = parasail_profile_create_stats_16(
-            sequence, len(sequence), &parasail_nuc44)
+            sequence, len(sequence), &MOD_NUC44)
 
         best_score = -1000000
         with nogil:
@@ -163,7 +186,7 @@ cpdef double scoredistance(query, ref, int gap_open=12, int gap_extend=4):
 
     align_func = parasail_lookup_function(b'nw_scan_16')
     result = align_func(qseq, len(qseq), rseq, len(rseq), gap_open, gap_extend,
-                        &parasail_nuc44)
+                        &MOD_NUC44)
     # Score-based distance metric.
     #   d(q, r) = score(q, q) + score(r, r) - 2*score(q, r)
     dist = (
@@ -199,7 +222,7 @@ cpdef double matchpct(query, ref, int gap_open=12, int gap_extend=4):
 
     align_func = parasail_lookup_function(b'nw_stats_scan_16')
     result = align_func(qseq, len(qseq), rseq, len(rseq), gap_open, gap_extend,
-                        &parasail_nuc44)
+                        &MOD_NUC44)
     dist = (100.0 * parasail_result_get_matches(result)
             / <double>parasail_result_get_length(result))
     parasail_result_free(result)
@@ -248,7 +271,7 @@ cdef class MatchRecord:
 
         align_func = parasail_lookup_function(b'nw_stats_scan_16')
         result = align_func(query, len(query), rseq, len(rseq), 12, 4,
-                            &parasail_nuc44)
+                            &MOD_NUC44)
         self.score = parasail_result_get_score(result)
         self.distance = (
             self_aligned_score(query, self.qlen)
@@ -374,7 +397,7 @@ cdef class LinearVPTree:
             raise KeyError('Failed to find {0!r}'.format(func_id))
         len_query = len(query)
         profile = parasail_profile_create_stats_16(
-            query, len_query, &parasail_nuc44)
+            query, len_query, &MOD_NUC44)
 
         neighbors = FastQueue(size)
         tau = neighbors.get_max_distance()

@@ -2,7 +2,8 @@ import unittest
 
 from vpsearch._vpsearch import self_aligned_score
 
-class TestCase(unittest.TestCase):
+
+class TestSelfAlignedScore(unittest.TestCase):
 
     def test_self_aligned_score(self):
         # Given
@@ -29,7 +30,7 @@ class TestCase(unittest.TestCase):
     def test_self_score_ambiguous_char(self):
         # Given
         seq = b'Y'
-        expected_score = -1
+        expected_score = +1
 
         # When
         seqscore = self_aligned_score(seq, len(seq))
@@ -40,10 +41,23 @@ class TestCase(unittest.TestCase):
     def test_self_score_with_ambiguous_seq(self):
         # Given
         seq = b'ACGTN'
-        expected_score = 19
+        expected_score = 21
 
         # When
         seqscore = self_aligned_score(seq, len(seq))
 
         # Then
         self.assertEqual(expected_score, seqscore)
+
+
+class TestModifiedNuc(unittest.TestCase):
+
+    def test_char_scores(self):
+        # Test for the modified nuc44 matrix, which has +1 on the diagonal for
+        # ambiguous nucleotides.
+        for ch in 'ACGT':
+            s = self_aligned_score(ch.encode(), 1)
+            self.assertEqual(s, 5)
+        for ch in 'SWRYKMBVHDNU':
+            s = self_aligned_score(ch.encode(), 1)
+            self.assertEqual(s, 1)

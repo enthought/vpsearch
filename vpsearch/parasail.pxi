@@ -106,3 +106,7 @@ cdef extern from "parasail/io.h":
 cdef extern from "parasail/matrices/nuc44.h":
     cdef parasail_matrix_t parasail_nuc44
 
+
+cdef extern from "parasail/matrix_lookup.h":
+    cdef parasail_matrix_t* parasail_matrix_copy(parasail_matrix_t *original)
+    cdef void parasail_matrix_set_value(parasail_matrix_t *matrix, int row, int col, int value)
