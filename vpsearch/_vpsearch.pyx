@@ -69,7 +69,7 @@ cpdef int self_aligned_score(char* seq, size_t length) nogil:
     substitution matrix.
 
     Match score (unambiguous character): 5
-    Match score (ambiguous character): -1
+    Match score (ambiguous character): 1 (modified nuc44)
     """
     cdef const parasail_matrix_t *matrix = &MOD_NUC44
     cdef int s = 0
