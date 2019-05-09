@@ -83,6 +83,12 @@ cdef class SeqDB:
     cdef parasail_sequences_t *sequences
 
     def __cinit__(self, str filename):
+        # We test explicitly whether `filename` points to an existing file,
+        # since `parasail_sequences_from_file` will do a hard exit(1) if the
+        # file does not exist.
+        if not os.path.exists(filename):
+            raise FileNotFoundError(filename)
+
         self.sequences = parasail_sequences_from_file(filename.encode())
 
     def __dealloc__(self):
