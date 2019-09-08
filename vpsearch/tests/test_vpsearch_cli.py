@@ -42,7 +42,7 @@ q1	s2	80.00	5	0	0	1	5	1	5	0	16
 class TestVpsearch(unittest.TestCase):
 
     def _write_fasta(self, content, fname):
-        with open(fname,'w') as f:
+        with open(fname, 'w') as f:
             f.write(content)
 
     def test_query(self):
@@ -79,4 +79,3 @@ class TestVpsearch(unittest.TestCase):
             self.assertEqual(result.exit_code, 0)
 
             self.assertEqual(EXPECTED_OUTPUT_ALMOST, result.output)
-
