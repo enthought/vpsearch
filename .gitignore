@@ -2,3 +2,8 @@ build/
 vpsearch.egg-info/
 vpsearch/_vpsearch.cpp
 vpsearch/_vpsearch.*.so
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
