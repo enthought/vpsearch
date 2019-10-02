@@ -1,3 +1,16 @@
+"""
+(C) Copyright 2010-2019 Enthought, Inc., Austin, TX
+All Rights Reserved.
+
+This software is provided without warranty under the terms of the BSD license
+included in LICENSE.txt and may be redistributed only under the conditions
+described in the aforementioned license.  The license is also available online
+at: https://github.com/enthought/vpsearch.
+
+Thanks for using Enthought open source!
+
+"""
+
 from concurrent.futures import ThreadPoolExecutor
 from itertools import repeat
 import os

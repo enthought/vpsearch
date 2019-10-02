@@ -1,3 +1,13 @@
+// (C) Copyright 2010-2019 Enthought, Inc., Austin, TX
+// All Rights Reserved.
+//
+// This software is provided without warranty under the terms of the BSD license
+// included in LICENSE.txt and may be redistributed only under the conditions
+// described in the aforementioned license.  The license is also available online
+// at: https://github.com/enthought/vpsearch.
+//
+// Thanks for using Enthought open source!
+
 #ifndef FASTQUEUE_H
 #define FASTQUEUE_H
 
@@ -13,8 +23,8 @@ class Neighbor : public std::pair<float, size_t>
 public:
     Neighbor(float distance, size_t index)
         : std::pair<float, size_t>(distance, index) {}
-    
-    bool operator<(const Neighbor& other) const 
+
+    bool operator<(const Neighbor& other) const
     {
         return first < other.first;
     }
@@ -40,14 +50,14 @@ public:
             }
         }
     }
-    
+
     float get_max_distance() const
     {
         return (elements.size() < size) ? INF : max_el->first;
     }
-    
+
     typedef typename std::vector<Neighbor>::iterator iterator;
-    
+
     iterator begin() noexcept
     {
         return elements.begin();
@@ -57,12 +67,12 @@ public:
         return elements.end();
     }
 
-    
+
 private:
     size_t size;
     std::vector<Neighbor> elements;
     iterator max_el;
 };
-    
+
 
 #endif // FASTQUEUE_H
