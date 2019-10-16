@@ -1,0 +1,25 @@
+language: generic
+dist: xenial
+
+env:
+  global:
+    - INSTALL_EDM_VERSION=2.0.0
+      PYTHONUNBUFFERED="1"
+
+os:
+  - linux
+  - os
+
+cache:
+  directories:
+    - "~/.cache"
+
+before_install:
+  - mkdir -p "${HOME}/.cache/download"
+  - if [[ ${TRAVIS_OS_NAME} == 'linux' ]]; then ci/install-edm-linux.sh; export PATH="${HOME}/edm/bin:${PATH}"; fi
+  - if [[ ${TRAVIS_OS_NAME} == 'osx' ]]; then ci/install-edm-osx.sh; export PATH="${PATH}:/usr/local/bin"; fi
+install:
+  - edm env import -f edm_requirements.json vpsearch
+  - edm run -e vpsearch -- pip install -e .
+script:
+  - edm run -e vpsearch -- python -m unittest discover -v .
