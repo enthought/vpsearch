@@ -39,7 +39,7 @@ def _get_platform_tag():
         return supported[sys.platform]
     except KeyError:
         msg = f"Not a supported platform: {sys.platform}"
-        raise RuntimeError(msg) from None
+        raise click.UsageError(msg) from None
 
 
 def _install_bundle(fname, environment):
