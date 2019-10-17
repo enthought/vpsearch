@@ -20,6 +20,6 @@ before_install:
   - if [[ ${TRAVIS_OS_NAME} == 'osx' ]]; then ci/install-edm-osx.sh; export PATH="${PATH}:/usr/local/bin"; fi
   - edm install -y click
 install:
-  - edm run -- python -m ci build-devenv
+  - edm run -- python ci/__main__.py build-devenv
 script:
-  - edm run -- python -m ci run-tests
+  - edm run -- python ci/__main__.py run-tests
