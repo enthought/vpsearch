@@ -1,12 +1,20 @@
 {
     "mark": [
         {
+            "name": "appdirs",
+            "state": "auto"
+        },
+        {
             "name": "click",
             "state": "manual"
         },
         {
             "name": "cython",
             "state": "manual"
+        },
+        {
+            "name": "distribute_remove",
+            "state": "auto"
         },
         {
             "name": "mkl",
@@ -17,12 +25,28 @@
             "state": "manual"
         },
         {
+            "name": "packaging",
+            "state": "auto"
+        },
+        {
             "name": "parasail",
             "state": "manual"
         },
         {
             "name": "pip",
             "state": "manual"
+        },
+        {
+            "name": "pyparsing",
+            "state": "auto"
+        },
+        {
+            "name": "setuptools",
+            "state": "manual"
+        },
+        {
+            "name": "six",
+            "state": "auto"
         }
     ],
     "metadata_version": "2.0",
@@ -43,6 +67,12 @@
     },
     "requirements": [
         {
+            "name": "appdirs",
+            "repository": "enthought/free",
+            "sha256": "d742ad6fd4241eb6288707eef468f4786463efd7e6660b6abf18789a323341b1",
+            "version": "1.4.3-1"
+        },
+        {
             "name": "click",
             "repository": "enthought/free",
             "sha256": "b61f24ef84336c0f67afc2c84cd7eb2c11a3fab9e71f1b81427b2279cf631592",
@@ -53,6 +83,12 @@
             "repository": "enthought/free",
             "sha256": "47b9181dd71250705c3c7fe65ec4d41ba77850689d31e9e7fcb1b4dea9e6ec02",
             "version": "0.29.13-1"
+        },
+        {
+            "name": "distribute_remove",
+            "repository": "enthought/free",
+            "sha256": "96721226786e9ac5a1e09d9ff78e57a843e2a4345d8ee93e8d0a3c70578302f7",
+            "version": "1.0.0-4"
         },
         {
             "name": "mkl",
@@ -67,6 +103,12 @@
             "version": "1.15.4-2"
         },
         {
+            "name": "packaging",
+            "repository": "enthought/free",
+            "sha256": "7cd3127256f2bc2e0dbed2f67e68fa21671df3eca607f782309f2006049de99a",
+            "version": "16.8-3"
+        },
+        {
             "name": "parasail",
             "repository": "enthought/free",
             "sha256": "c728eaf3c8658d56b4f57f5604a912cdef55759942ff95ca06e26528772a30b8",
@@ -77,6 +119,24 @@
             "repository": "enthought/free",
             "sha256": "09de499e550cfaa19c84b65a7d229a1745d106f02a36c26ceea48c9eaeaff27c",
             "version": "18.1-1"
+        },
+        {
+            "name": "pyparsing",
+            "repository": "enthought/free",
+            "sha256": "a1b6da4dcfe747ad2a36c106191985c4d2c3a4c8ce147033c833c7c42afc0877",
+            "version": "2.2.0-1"
+        },
+        {
+            "name": "setuptools",
+            "repository": "enthought/free",
+            "sha256": "1bc23a9cfde82b524333fb3bcc85d125ba70a431766af2dcf74ea815057cb0e7",
+            "version": "38.2.5-2"
+        },
+        {
+            "name": "six",
+            "repository": "enthought/free",
+            "sha256": "95d3c2753432aae289571c6d9ec921927729c5e50d99f69078e475dfa48a28f6",
+            "version": "1.11.0-1"
         }
     ],
     "runtime": {

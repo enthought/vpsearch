@@ -17,6 +17,7 @@ DEPENDENCIES = [
     "numpy",
     "parasail",
     "pip",
+    "setuptools"
 ]
 
 EDM_CONFIG = "ci/edm.yaml"
