@@ -8,7 +8,7 @@ from distutils.core import setup
 from distutils.extension import Extension
 
 import numpy as np
-from Cython.Distutils import build_ext
+from Cython.Build import build_ext
 
 
 def parasail_get_include():
