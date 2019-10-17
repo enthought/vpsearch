@@ -1,0 +1,78 @@
+{
+    "mark": [
+        {
+            "name": "click",
+            "state": "manual"
+        },
+        {
+            "name": "cython",
+            "state": "manual"
+        },
+        {
+            "name": "mkl",
+            "state": "auto"
+        },
+        {
+            "name": "numpy",
+            "state": "manual"
+        },
+        {
+            "name": "parasail",
+            "state": "manual"
+        }
+    ],
+    "metadata_version": "2.0",
+    "modifiers": {
+        "allow_any": [],
+        "allow_newer": [],
+        "allow_older": []
+    },
+    "repositories": {
+        "packages": [
+            "enthought/free"
+        ],
+        "runtimes": [
+            "enthought/free"
+        ]
+    },
+    "requirements": [
+        {
+            "name": "click",
+            "repository": "enthought/free",
+            "sha256": "c65444b98db3840adc1e24bbfddd663a7d0d46d5cd756c7e4b72727d973724d7",
+            "version": "7.0-1"
+        },
+        {
+            "name": "cython",
+            "repository": "enthought/free",
+            "sha256": "c76f1e601bbe675ac64ea5e3d0760e48eca05e8a61d5aabc670db55f9813f7ef",
+            "version": "0.29.13-1"
+        },
+        {
+            "name": "mkl",
+            "repository": "enthought/free",
+            "sha256": "5d60eced36bb3a2614083d00fac0b96a1330802811b307ff6536e775ae56a744",
+            "version": "2018.0.3-2"
+        },
+        {
+            "name": "numpy",
+            "repository": "enthought/free",
+            "sha256": "ef80f28bf9f69c8588455340fd47fd709ba5e10ff17537d089678c6f37c5e011",
+            "version": "1.15.4-2"
+        },
+        {
+            "name": "parasail",
+            "repository": "enthought/free",
+            "sha256": "aa11d15fc98aee1565c0055acd7c2e75adefd31cbde589c4a6c7db97f270b512",
+            "version": "2.4.1-1"
+        }
+    ],
+    "runtime": {
+        "implementation": "cpython",
+        "platform": "rh6_x86_64",
+        "platform_abi": "gnu",
+        "repository": "enthought/free",
+        "sha256": "8f4bd731f23f1e6711a6f65b88e8b1e208ac7941348b599a2420efd320fd2a04",
+        "version": "3.6.0+7"
+    }
+}
