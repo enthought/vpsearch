@@ -9,6 +9,10 @@ databases, such as [RDP](https://rdp.cme.msu.edu/), this results in sequence
 lookups that are typically 5-10 times faster than other alignment-based lookup
 methods.
 
+Vantage-point tree search uses global-to-global alignment to compare sequences,
+rather than seed-and-extend approximative methods as used for example by
+BLAST.
+
 ## Usage
 
 Given a sequence database (in FASTA format), `vpsearch build` constructs an
