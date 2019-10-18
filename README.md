@@ -3,7 +3,8 @@ vpsearch - Fast Vantage-Point Tree Search for Sequence Databases
 ----------------------------------------------------------------
 
 This is a package for indexing and querying a sequence database for fast
-nearest-neighbor search by means of vantage point trees. For reasonably large
+nearest-neighbor search by means of [vantage point
+trees](https://en.wikipedia.org/wiki/Vantage-point_tree). For reasonably large
 databases, such as [RDP](https://rdp.cme.msu.edu/), this results in sequence
 lookups that are typically 5-10 times faster than other alignment-based lookup
 methods.
@@ -133,10 +134,21 @@ overhead).
 
 This package is licensed under the [BSD license](LICENSE.txt).
 
-Parasail, which is used by this package, is licensed under the MIT license. If
-you use vpsearch or Parasail for a research project, please consider including
-a citation of
+## References
 
-    > Daily, Jeff. (2016). Parasail: SIMD C library for global, semi-global,
-    > and local pairwise sequence alignments. BMC Bioinformatics, 17(1),
-    > 1-11. doi:10.1186/s12859-016-0930-z
+Vantage point trees were introduced in
+
+> Uhlmann, Jeffrey (1991). "Satisfying General Proximity/Similarity Queries
+  with Metric Trees". Information Processing Letters. 40 (4):
+  175–179. doi:10.1016/0020-0190(91)90074-r.
+
+> Yianilos (1993). Data structures and algorithms for nearest neighbor search
+  in general metric spaces (PDF). Fourth annual ACM-SIAM symposium on Discrete
+  algorithms. Society for Industrial and Applied Mathematics Philadelphia, PA,
+  USA. pp. 311–321. pny93.
+
+The Parasail library is described in
+
+> Daily, Jeff. (2016). Parasail: SIMD C library for global, semi-global, and
+  local pairwise sequence alignments. BMC Bioinformatics, 17(1),
+  1-11. doi:10.1186/s12859-016-0930-z
