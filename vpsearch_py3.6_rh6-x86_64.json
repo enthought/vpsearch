@@ -1,0 +1,150 @@
+{
+    "mark": [
+        {
+            "name": "appdirs",
+            "state": "auto"
+        },
+        {
+            "name": "click",
+            "state": "manual"
+        },
+        {
+            "name": "cython",
+            "state": "manual"
+        },
+        {
+            "name": "distribute_remove",
+            "state": "auto"
+        },
+        {
+            "name": "mkl",
+            "state": "auto"
+        },
+        {
+            "name": "numpy",
+            "state": "manual"
+        },
+        {
+            "name": "packaging",
+            "state": "auto"
+        },
+        {
+            "name": "parasail",
+            "state": "manual"
+        },
+        {
+            "name": "pip",
+            "state": "manual"
+        },
+        {
+            "name": "pyparsing",
+            "state": "auto"
+        },
+        {
+            "name": "setuptools",
+            "state": "manual"
+        },
+        {
+            "name": "six",
+            "state": "auto"
+        }
+    ],
+    "metadata_version": "2.0",
+    "modifiers": {
+        "allow_any": [],
+        "allow_newer": [],
+        "allow_older": []
+    },
+    "repositories": {
+        "packages": [
+            "enthought/gpl",
+            "enthought/lgpl",
+            "enthought/free"
+        ],
+        "runtimes": [
+            "enthought/free"
+        ]
+    },
+    "requirements": [
+        {
+            "name": "appdirs",
+            "repository": "enthought/free",
+            "sha256": "82d5108b9b708dfd1853e8e747755f2c7dce71c58d3955b36fc6722422d628af",
+            "version": "1.4.3-1"
+        },
+        {
+            "name": "click",
+            "repository": "enthought/free",
+            "sha256": "c65444b98db3840adc1e24bbfddd663a7d0d46d5cd756c7e4b72727d973724d7",
+            "version": "7.0-1"
+        },
+        {
+            "name": "cython",
+            "repository": "enthought/free",
+            "sha256": "c76f1e601bbe675ac64ea5e3d0760e48eca05e8a61d5aabc670db55f9813f7ef",
+            "version": "0.29.13-1"
+        },
+        {
+            "name": "distribute_remove",
+            "repository": "enthought/free",
+            "sha256": "3ccc80bc7f68050d4f1a2a9e6e0ff3b277060caf1d51db03ef552b21c849687e",
+            "version": "1.0.0-4"
+        },
+        {
+            "name": "mkl",
+            "repository": "enthought/free",
+            "sha256": "5d60eced36bb3a2614083d00fac0b96a1330802811b307ff6536e775ae56a744",
+            "version": "2018.0.3-2"
+        },
+        {
+            "name": "numpy",
+            "repository": "enthought/free",
+            "sha256": "ef80f28bf9f69c8588455340fd47fd709ba5e10ff17537d089678c6f37c5e011",
+            "version": "1.15.4-2"
+        },
+        {
+            "name": "packaging",
+            "repository": "enthought/free",
+            "sha256": "e29c32c48565d32a58358306662a44b63df5348a59d766847ec38a8b36e2016f",
+            "version": "16.8-3"
+        },
+        {
+            "name": "parasail",
+            "repository": "enthought/free",
+            "sha256": "aa11d15fc98aee1565c0055acd7c2e75adefd31cbde589c4a6c7db97f270b512",
+            "version": "2.4.1-1"
+        },
+        {
+            "name": "pip",
+            "repository": "enthought/free",
+            "sha256": "6503cce5fc46f9b728e35cf6a935613a9160a636596bfabd36c4a003f19d1cac",
+            "version": "18.1-1"
+        },
+        {
+            "name": "pyparsing",
+            "repository": "enthought/free",
+            "sha256": "6fe8234a197ae9f9bb45d56c1e84c97a00a5f1570336d27ed0ab9514b178a51c",
+            "version": "2.2.0-1"
+        },
+        {
+            "name": "setuptools",
+            "repository": "enthought/free",
+            "sha256": "381be57acfe79807ecae13c84f22d2325965e3c6434217f7f4d1e3f1808de5a9",
+            "version": "38.2.5-2"
+        },
+        {
+            "name": "six",
+            "repository": "enthought/free",
+            "sha256": "8470f5ce71367d794c1c1b193e812992242cf15f6f9ee3b5569f4a46bfbc75a0",
+            "version": "1.11.0-1"
+        }
+    ],
+    "runtime": {
+        "implementation": "cpython",
+        "platform": "rh6_x86_64",
+        "platform_abi": "gnu",
+        "repository": "enthought/free",
+        "sha256": "a5cb8c1e314b9a63a631505489d3dbdb660c82b531049127104006588883874a",
+        "version": "3.6.5+3"
+    }
+}
