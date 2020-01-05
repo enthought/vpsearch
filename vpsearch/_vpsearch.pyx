@@ -1,5 +1,7 @@
+# cython: language_level=3
+
 """
-(C) Copyright 2010-2019 Enthought, Inc., Austin, TX
+(C) Copyright 2010-2020 Enthought, Inc., Austin, TX
 All Rights Reserved.
 
 This software is provided without warranty under the terms of the BSD license
