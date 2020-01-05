@@ -1,14 +1,13 @@
 import os
 import sys
 
-# Monkeypatch distutils.
-from setuptools import find_packages  # noqa
+from setuptools import find_packages
 
 from distutils.core import setup
 from distutils.extension import Extension
 
 import numpy as np
-from Cython.Build import build_ext
+from Cython.Build import cythonize
 
 
 def parasail_get_include():
@@ -23,6 +22,11 @@ def parasail_get_lib():
         return os.environ['PARASAIL_LIBRARY_DIR']
     except KeyError:
         return os.path.join(sys.prefix, "lib")
+
+
+def get_long_description():
+    with open("README.md") as fp:
+        return fp.read()
 
 
 if sys.platform == 'darwin':
@@ -42,8 +46,24 @@ setup(
     name='vpsearch',
     version='0.1',
     author='Enthought',
+    author_email='info@enthought.com',
+    url='https://github.com/enthought/vpsearch',
     description='Global-Global genetic database search.',
-    ext_modules=[
+    long_description=get_long_description(),
+    long_description_content_type='text/markdown',
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Science/Research",
+        "License :: OSI Approved :: BSD License",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Cython",
+        "Topic :: Scientific/Engineering",
+    ],
+    license="BSD",
+    platforms=["Linux", "Mac OS-X", "Unix"],
+    ext_modules=cythonize([
         Extension(
             'vpsearch._vpsearch',
             sources=['vpsearch/_vpsearch.pyx'],
@@ -54,13 +74,21 @@ setup(
             libraries=['parasail'],
             language='c++',
             extra_compile_args=CPP_BASE_ARGS + ['-std=c++11'],
-            extra_link_args=CPP_BASE_ARGS + LINK_ARGS),
-    ],
-    license="Proprietary",
+            extra_link_args=CPP_BASE_ARGS + LINK_ARGS,
+            depends=[
+                'vpsearch/fastqueue.hpp',
+                'vpsearch/parasail.pxi',
+            ]
+        ),
+    ]),
     entry_points={
         'console_scripts': [
             'vpsearch=vpsearch._cli:main',
         ],
     },
-    cmdclass=dict(build_ext=build_ext),
+    install_requires=[
+        "click",
+        "numpy",
+    ],
+    packages=find_packages(),
 )
