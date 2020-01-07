@@ -1,5 +1,6 @@
 include LICENSE.txt
 include MANIFEST.in
 include README.md
+include CHANGES.txt
 
 recursive-include vpsearch *.pyx *.pxi *.hpp
