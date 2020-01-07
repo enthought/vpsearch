@@ -83,8 +83,11 @@ can install the necessary prerequisites (Click, Cython, Numpy, and Parasail) by
 importing an EDM environment from the bundle file shipped with this repository
 
 ```bash
-  edm env import -f edm_requirements.json vpsearch
+  edm env import -f <bundle.json> vpsearch
 ```
+where `<bundle.json>` is one of `vpsearch_py3.6_osx-x86_64.json` or
+`vpsearch_py3.6_rh6-x86_64.json`, depending on your platform.
+
 When this is done, activate the environment, and install this package. From the
 root of this repository, run
 ```bash
