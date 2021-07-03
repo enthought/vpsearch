@@ -112,20 +112,42 @@ via
   pip install -e .
 ```
 
+### Using Docker
+
+It is possible to build a Docker image that contains vpsearch as well as all of
+its dependencies. This is useful, for example, when integrating vpsearch into a
+workflow manager, like Snakemake, CWL, or WDL.
+
+To build the image, run the following command from the root of this repository:
+```bash
+  docker build . -t vpsearch-image
+```
+
+Once the image has been built, vpsearch can then be run from within a
+container. Assuming you have a FASTA file of target sequences in the file
+`database.fasta` in the current directory, run the following to build a
+vpsearch index:
+```bash
+  docker run -it -v $PWD:/data -t vpsearch-image vpsearch build /data/database.fasta
+```
+
+To query the index for a given FASTA file `query.fasta` of query sequences,
+run:
+```bash
+  docker run -it -v $PWD:/data -t vpsearch-image vpsearch query /data/database.db /data/query.fasta
+```
+
 ### Troubleshooting
 
 The vpsearch package relies on the Parasail C library for alignment. If
 building the package fails because the Parasail library cannot be found, you
 can manually specify the location of the Parasail include files and shared
 object libraries by setting the `PARASAIL_INCLUDE_DIR` and `PARASAIL_LIB_DIR`
-environment variables before building the package:
-```bash
-  export PARASAIL_INCLUDE_DIR=/location/of/parasail/include/files
-  export PARASAIL_LIB_DIR=/location/of/parasail/lib/files
-  pip install -e .
-```
-Note that if Parasail is installed in a non-standard location, you may have to
-set the `LD_LIBRARY_PATH` variable at runtime.
+environment variables before building the package: ```bash export
+PARASAIL_INCLUDE_DIR=/location/of/parasail/include/files export
+PARASAIL_LIB_DIR=/location/of/parasail/lib/files pip install -e .  ``` Note
+that if Parasail is installed in a non-standard location, you may have to set
+the `LD_LIBRARY_PATH` variable at runtime.
 
 ## Implementation notes
 
