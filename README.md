@@ -143,11 +143,14 @@ The vpsearch package relies on the Parasail C library for alignment. If
 building the package fails because the Parasail library cannot be found, you
 can manually specify the location of the Parasail include files and shared
 object libraries by setting the `PARASAIL_INCLUDE_DIR` and `PARASAIL_LIB_DIR`
-environment variables before building the package: ```bash export
-PARASAIL_INCLUDE_DIR=/location/of/parasail/include/files export
-PARASAIL_LIB_DIR=/location/of/parasail/lib/files pip install -e .  ``` Note
-that if Parasail is installed in a non-standard location, you may have to set
-the `LD_LIBRARY_PATH` variable at runtime.
+environment variables before building the package:
+```bash
+  export PARASAIL_INCLUDE_DIR=/location/of/parasail/include/files
+  export PARASAIL_LIB_DIR=/location/of/parasail/lib/files
+  pip install -e .
+```
+Note that if Parasail is installed in a non-standard location, you may have to
+set the `LD_LIBRARY_PATH` variable at runtime.
 
 ## Implementation notes
 
