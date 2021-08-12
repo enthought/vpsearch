@@ -162,6 +162,20 @@ represents the linearized tree can only query the database, not build the tree.
 The slower tree-of-nodes implementation can build and query (albeit with more
 overhead).
 
+## Building wheels
+
+Wheels for this package can be built in a platform-independent way using
+[cibuildwheel](https://cibuildwheel.readthedocs.io/en/stable/). In a clean
+Python environment, run `pip install cibuildwheel` to install the tool,
+followed by e.g.
+```bash
+  CIBW_BUILD=cp38-manylinux_x86_64 \
+  CIBW_BEFORE_BUILD="./ci/build-parasail.sh" \
+  python -m cibuildwheel --output-dir wheelhouse --platform linux
+```
+to build Python 3.8 wheels for Linux. By varying the build tag, wheels for
+other Python versions can be built. 
+
 ## License
 
 This package is licensed under the [BSD license](LICENSE.txt).
