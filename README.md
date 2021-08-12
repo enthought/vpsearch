@@ -169,6 +169,7 @@ Wheels for this package can be built in a platform-independent way using
 Python environment, run `pip install cibuildwheel` to install the tool,
 followed by e.g.
 ```bash
+  CIBW_BUILD_VERBOSITY=1 \
   CIBW_BUILD=cp38-manylinux_x86_64 \
   CIBW_BEFORE_BUILD="./ci/build-parasail.sh" \
   python -m cibuildwheel --output-dir wheelhouse --platform linux
