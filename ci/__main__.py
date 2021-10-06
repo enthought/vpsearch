@@ -20,7 +20,6 @@ DEPENDENCIES = [
     "setuptools"
 ]
 
-EDM_CONFIG = "ci/edm.yaml"
 
 @click.group()
 def cli():
@@ -46,8 +45,6 @@ def regenerate_bundles():
     for platform, bundle_fname in BUNDLES.items():
         cmd = [
             "edm",
-            "--config", EDM_CONFIG,
-            "--api-token", os.environ['HATCHER_TOKEN'],
             "bundle",
             "generate",
             "--version", "3.6",

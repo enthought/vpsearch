@@ -1,0 +1,31 @@
+name: Tests
+
+on:
+  pull_request
+
+jobs:
+  tests:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: [3.6]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Cache EDM packages
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache
+        key: ${{ runner.os }}--${{ hashFiles('requirements.txt') }}
+    - name: Setup EDM
+      uses: enthought/setup-edm-action@v1
+      with:
+        edm-version: 3.2.5
+    - name: Install CI dependencies
+      run: edm install -y click
+    - name: Install development environment
+      run: edm run -- python -m ci build-devenv
+    - name: Run vpsearch tests
+      run: edm run -- python -m ci run-tests
