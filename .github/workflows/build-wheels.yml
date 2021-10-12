@@ -15,7 +15,7 @@ jobs:
     steps:
     - name: install automake
       run: brew install automake
-      if: matrix.os == 'macOS-latest'
+      if: matrix.os == 'macos-latest'
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
     - name: install cibuildwheel
