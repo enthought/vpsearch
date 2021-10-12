@@ -1,3 +1,4 @@
+wheelhouse/
 build/
 vpsearch.egg-info/
 vpsearch/_vpsearch.cpp
