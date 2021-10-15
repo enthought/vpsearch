@@ -44,7 +44,7 @@ else:
 
 setup(
     name='vpsearch',
-    version='0.1.2.dev0',
+    version='0.1.2',
     author='Enthought',
     author_email='info@enthought.com',
     url='https://github.com/enthought/vpsearch',
@@ -58,6 +58,9 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Programming Language :: Cython",
         "Topic :: Scientific/Engineering",
     ],

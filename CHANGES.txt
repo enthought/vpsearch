@@ -1,6 +1,10 @@
 Changes since latest release
 ============================
 
+Version 0.1.2
+=============
+
+* Provide wheels on Linux/macOS (with vendorized Parasail 2.4.3)
 
 Version 0.1.1
 =============
