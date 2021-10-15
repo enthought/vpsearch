@@ -44,7 +44,7 @@ else:
 
 setup(
     name='vpsearch',
-    version='0.1.2',
+    version='0.1.3.dev0',
     author='Enthought',
     author_email='info@enthought.com',
     url='https://github.com/enthought/vpsearch',
