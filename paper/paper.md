@@ -9,6 +9,7 @@ authors:
     orcid: 0000-0002-5813-5659
     affiliation: "1, 2"
   - name: Steven J. Kern
+    orcid: 0000-0002-3789-7400
     affiliation: 3
   - name: Robert Kern
     affiliation: 3
