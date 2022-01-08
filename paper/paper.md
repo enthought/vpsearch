@@ -67,8 +67,8 @@ below we show that for short sequences (such as the 16S rRNA gene used in
 bacterial classification) VPsearch outperforms both BLAST (7x speedup) and
 ggsearch36 from the FASTA suite (27x speedup) without any loss in accuracy.
 
-The VPsearch tool is implemented in Python, using Cython for
-performance-critical sections, and to interface with external libraries. To
+The VPsearch tool is implemented in Python, using Cython [@2011-behnel-cython]
+for performance-critical sections, and to interface with external libraries. To
 compare sequences during indexing and querying, VPsearch calls out to Parasail
 [@2016-daily-ParasailSIMDLibrary], a library of SIMD-optimized implementations
 for global and local sequence alignment.
