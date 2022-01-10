@@ -118,7 +118,7 @@ where the taxonomic assignment differs between ggsearch36 and VPsearch, due to
 a small difference in how the alignment parameters are chosen for both
 algorithms. Both algorithms identify the ASV as being in the family of
 _Lachnospiraceae_, with the difference on the genus level. Between VPsearch and
-Blast+, there are three difference assignments, due to the fact that several
+Blast+, there are three different assignments, due to the fact that several
 sequences in the database present an equally plausible match for the query
 sequence.
 
