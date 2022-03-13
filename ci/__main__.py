@@ -59,7 +59,7 @@ def regenerate_bundles():
 
 def _get_platform_tag():
     supported = {
-        'linux': 'rh6-x86_64',
+        'linux': 'rh7-x86_64',
         'darwin': 'osx-x86_64',
     }
     try:
