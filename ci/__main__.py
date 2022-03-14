@@ -6,8 +6,8 @@ import sys
 import click
 
 BUNDLES = {
-    "osx-x86_64": "vpsearch_py3.6_osx-x86_64.json",
-    "rh6-x86_64": "vpsearch_py3.6_rh6-x86_64.json",
+    "osx-x86_64": "vpsearch_py3.8_osx-x86_64.json",
+    "rh7-x86_64": "vpsearch_py3.8_rh7-x86_64.json",
 }
 DEVENV = "vpsearch"
 
@@ -19,6 +19,8 @@ DEPENDENCIES = [
     "pip",
     "setuptools"
 ]
+
+PYTHON_VERSION = "3.8"
 
 
 @click.group()
@@ -47,7 +49,7 @@ def regenerate_bundles():
             "edm",
             "bundle",
             "generate",
-            "--version", "3.6",
+            "--version", PYTHON_VERSION,
             "--platform", platform,
             "--bundle-format", "2.0",
             "--output-file", bundle_fname,
@@ -57,7 +59,7 @@ def regenerate_bundles():
 
 def _get_platform_tag():
     supported = {
-        'linux': 'rh6-x86_64',
+        'linux': 'rh7-x86_64',
         'darwin': 'osx-x86_64',
     }
     try:

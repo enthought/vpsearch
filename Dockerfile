@@ -4,7 +4,7 @@ WORKDIR /app
 ENV EDM_ROOT_DIRECTORY=/app/edm
 
 COPY . .
-RUN edm env import -f vpsearch_py3.6_rh6-x86_64.json vpsearch-env && \
+RUN edm env import -f vpsearch_py3.8_rh7-x86_64.json vpsearch-env && \
     edm cache purge --all -y
 
 RUN yum -y install gcc gcc-c++ && \
