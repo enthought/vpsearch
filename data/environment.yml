@@ -1,0 +1,8 @@
+name: primer-trimming
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - biopython=1.79
+  - rdptools=2.0.3

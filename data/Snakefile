@@ -1,0 +1,40 @@
+# The database of full-length 16S sequences
+DATABASE = "bac120_ssu_reps_r207.fna"
+# File containing the primers that delineate the targeted region. Note: both
+# primers must be present in the sequence: this will probably mean that you
+# have to supply the reverse complement of the reverse primer.
+PRIMERS = "v4-primers-rev.fa"
+
+# No modifications below this line should be necessary.
+
+_BASENAME = os.path.splitext(DATABASE)[0]
+
+rule all:
+    input:
+        _BASENAME + "-sliced-dedup.fa"
+
+rule probematch:
+    input:
+        PRIMERS,
+        DATABASE
+    output:
+        "primer-locs.tsv"
+    shell:
+        "ProbeMatch {input} > {output}"
+
+rule cutprimers:
+    input:
+        "primer-locs.tsv",
+        DATABASE
+    output:
+        _BASENAME + "-sliced.fa"
+    shell:
+        "python scripts/cut-primers.py {input} > {output}"
+
+rule dedup:
+    input:
+        _BASENAME + "-sliced.fa"
+    output:
+        _BASENAME + "-sliced-dedup.fa"
+    shell:
+        "python scripts/dedup.py {input} > {output}"
