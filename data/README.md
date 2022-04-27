@@ -43,7 +43,8 @@ is located.
 
 The sequence database used to demo this package is the file of bacterial 16S
 sequences from GTDB, version 207, available
-[here](https://data.gtdb.ecogenomic.org/releases/release207/207.0/genomic_files_reps/bac120_ssu_reps_r207.tar.gz). It consists of 16474 full-length 16S sequences
+[here](https://data.gtdb.ecogenomic.org/releases/release207/207.0/genomic_files_reps/bac120_ssu_reps_r207.tar.gz). It
+consists of 38474 full-length 16S sequences.
 
 If your database is anything other than GTDB, version 207, edit the Snakefile
 in this directory and change the variable `DATABASE` on the first line to refer
@@ -68,7 +69,8 @@ conda activate primer-trimming
 
 ### Processing the sequences
 
-At this point, processing the sequence database to obtain a sliced, deduplicated version is only a single Snakemake command away:
+At this point, processing the sequence database to obtain a sliced,
+deduplicated version is only a single Snakemake command away:
 
 ```console
   snakemake -c 1
