@@ -24,6 +24,7 @@ rule probematch:
 
 rule cutprimers:
     input:
+        PRIMERS,
         "primer-locs.tsv",
         DATABASE
     output:
