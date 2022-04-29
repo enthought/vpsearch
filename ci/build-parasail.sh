@@ -8,8 +8,8 @@ set -euxo pipefail
 PARASAIL_VERSION="2.5"
 PARASAIL_URL="https://github.com/jeffdaily/parasail/archive/refs/tags/v${PARASAIL_VERSION}.tar.gz"
 
-PREFIX="${1:-/usr/local}"
-TARGET="${2:-x86_64}"
+TARGET="${1:-x86_64}"
+PREFIX="${2:-/usr/local}"
 
 # Download
 curl -L "${PARASAIL_URL}" -o - | tar xzf -
