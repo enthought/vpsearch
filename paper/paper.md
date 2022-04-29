@@ -74,7 +74,9 @@ compare sequences during indexing and querying, VPsearch calls out to Parasail
 for global and local sequence alignment.
 
 VPsearch outputs similarity search results in the "BLAST-6" tabular format also
-used by BLAST, Diamond, the FASTA tool suite and others, so that it can be used
+used by BLAST [@1990-blast], Diamond
+[@2021-buchfink-SensitiveProteinAlignments], the FASTA tool suite
+[@2016-pearson-FindingProteinNucleotide], and others, so that it can be used
 as a drop-in replacement for any of these tools. VPsearch is able to return the
 $k$ most similar sequences for a given query, not just the most similar match,
 and supports querying the database in multithreaded mode.
