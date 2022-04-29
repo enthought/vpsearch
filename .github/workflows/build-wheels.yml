@@ -8,13 +8,13 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.8']
-      include:
-        - os: ubuntu-latest
-          target: x86_64
-        - os: macos-latest
-          target: x86_64
-        - os: macos-latest
-          target: arm64
+        include:
+          - os: ubuntu-latest
+            target: x86_64
+          - os: macos-latest
+            target: x86_64
+          - os: macos-latest
+            target: arm64
 
     runs-on: ${{ matrix.os }}
 
