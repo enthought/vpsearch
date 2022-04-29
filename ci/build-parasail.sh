@@ -5,10 +5,11 @@
 
 set -euxo pipefail
 
-PARASAIL_VERSION="2.4.3"
-PARASAIL_URL="https://github.com/jeffdaily/parasail/releases/download/v${PARASAIL_VERSION}/parasail-${PARASAIL_VERSION}.tar.gz"
+PARASAIL_VERSION="2.5"
+PARASAIL_URL="https://github.com/jeffdaily/parasail/archive/refs/tags/v${PARASAIL_VERSION}.tar.gz"
 
-PREFIX="/usr/local"
+PREFIX="${1:-/usr/local}"
+TARGET="${2:-x86_64}"
 
 # Download
 curl -L "${PARASAIL_URL}" -o - | tar xzf -
@@ -17,16 +18,18 @@ curl -L "${PARASAIL_URL}" -o - | tar xzf -
 cd "parasail-${PARASAIL_VERSION}"
 autoreconf -fi
 
-if [[ $(uname) == "Darwin" ]]; then
-    # Create a fat library
-    CFLAGS="-arch arm64 -arch x86_64"
+if [[ "$TARGET" == "arm64" && $(uname) == "Darwin" ]]; then
+    ./configure \
+        CFLAGS="-target aarch64-apple-darwin" \
+        CXXFLAGS="-target aarch64-apple-darwin" \
+        --prefix="$PREFIX" \
+        --host aarch64-apple-darwin \
+        --target aarch64-apple-darwin
 else
-    CFLAGS=""
+    ./configure
 fi
-
-CFLAGS="$CFLAGS" ./configure --prefix "$PREFIX"
 make -j4 && make install
 
 if [[ $(uname) == "Darwin" ]]; then
-    lipo -info "$PREFIX"/lib/*.dylib
+    lipo -info "$PREFIX"/lib/libparasail.*
 fi
