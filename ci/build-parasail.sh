@@ -24,7 +24,7 @@ if [[ "$TARGET" == "arm64" && $(uname) == "Darwin" ]]; then
         CXXFLAGS="-target aarch64-apple-darwin" \
         --prefix="$PREFIX" \
         --host aarch64-apple-darwin \
-        --target aarch64-apple-darwin
+        --build aarch64-apple-darwin
 else
     ./configure
 fi
