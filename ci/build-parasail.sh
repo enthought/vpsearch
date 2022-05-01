@@ -19,6 +19,7 @@ cd "parasail-${PARASAIL_VERSION}"
 autoreconf -fi
 
 if [[ "$TARGET" == "arm64" && $(uname) == "Darwin" ]]; then
+    softwareupdate --agree-to-license --install-rosetta
     ./configure \
         CFLAGS="-target aarch64-apple-darwin" \
         CXXFLAGS="-target aarch64-apple-darwin" \
