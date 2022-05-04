@@ -11,7 +11,7 @@ steps listed in the next section.
 
 ## The sequence database
 
-Vpearch will take any FASTA file of sequences, but under some circumstances it
+Vpsearch will take any FASTA file of sequences, but under some circumstances it
 may make sense to preprocess the sequence before building the index. This is
 necessary, for example, when the sequence database consists of full-length 16S
 sequences, but the query sequences come from one of the hypervariable regions
