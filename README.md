@@ -37,11 +37,11 @@ database takes about 20 minutes on a standard machine.
 Once a tree has been built, unknown sequences can be looked up using the
 `vpsearch query` command. Here we supply a query file with a single
 sequence. The `query.fa` file can also be found in the `data/` directory and
-represents a Lactobacillus helsingborgensis sample whose sequence was
+represents a _Lactobacillus helsingborgensis_ sample whose sequence was
 downloaded from RefSeq. We see that we have a perfect match with
 `RS_GCF_000970855.1`, which happens to be the same sequence. Other matches are
 highly similar but not identical, and represent different species of
-Lactobacillus (kimbladii, melliventris, and panisapium, respectively).
+_Lactobacillus_ (_kimbladii_, _melliventris_, and _panisapium_, respectively).
 
 ```console
   $ vpsearch query bac120_ssu_reps_r207-sliced-dedup.db query.fa
