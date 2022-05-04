@@ -23,10 +23,10 @@ obtained by trimming the GTDB 16S database to the v3-v4 hypervariable
 region. This database contains 10875 unique sequences, and can be found (in
 compressed form) in the `data/` directory inside this repository.
 ```console
-  $ vpsearch build bac120_ssu_reps_r207-sliced-dedup.fa
+  $ vpsearch build bac120_ssu_reps_r207-sliced-dedup.fa.gz
   Building for 10875 sequences...done.
   Linearizing...done.
-  Database created in bac120_ssu_reps_r207-sliced-dedup.db
+  Database created in bac120_ssu_reps_r207-sliced-dedup.fa.db
 ```
 
 As this is a relatively small database, the process finishes quickly, in about
@@ -44,7 +44,7 @@ highly similar but not identical, and represent different species of
 _Lactobacillus_ (_kimbladii_, _melliventris_, and _panisapium_, respectively).
 
 ```console
-  $ vpsearch query bac120_ssu_reps_r207-sliced-dedup.db query.fa
+  $ vpsearch query bac120_ssu_reps_r207-sliced-dedup.fa.db query.fa
   NR_126253.1     RS_GCF_000970855.1      100.00  253     0       0       1       253     1       253     0       1265
   NR_126253.1     RS_GCF_014323605.1      98.81   253     0       0       1       253     1       253     0       1238
   NR_126253.1     RS_GCF_013346935.1      98.02   253     0       0       1       253     1       253     0       1220

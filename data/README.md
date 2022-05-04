@@ -50,7 +50,7 @@ If your database is anything other than GTDB, version 207, edit the Snakefile
 in this directory and change the variable `DATABASE` on the first line to refer
 to your sequence database.
 
-The sequence database must be in uncompressed format.
+The sequence database can be in compressed or uncompressed format.
 
 ### Setting up and activating an environment (optional)
 
