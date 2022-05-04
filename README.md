@@ -76,6 +76,24 @@ package.
 
 ## Installation
 
+### Using wheels
+
+The vpsearch package is available from the Python Package Index (PyPI) and can
+be installed using `pip` as follows:
+```console
+  python -m pip install vpsearch
+```
+
+On supported platforms (Linux, Intel macOS), this will install a binary wheel
+that includes the Parasail dependency. On other platforms, vpsearch can be
+installed from source, and instructions on how to do so can be found below.
+
+Users of Apple Silicon should compile the package from scratch using the
+instructions below. Note that vpsearch depends on Parasail, a library for fast
+alignment using Intel-specific SIMD instruction sets. These are not supported
+on Apple Silicon and even though vpsearch can be made to run on this platform,
+it will be slow.
+
 ### Using EDM
 
 Users of the [Enthought Deployment Manager(EDM)](https://www.enthought.com/enthought-deployment-manager/)
@@ -92,23 +110,6 @@ When this is done, activate the environment, and install this package. From the
 root of this repository, run
 ```bash
   edm shell -e vpsearch
-  pip install -e .
-```
-
-### Using Pip, Conda, etc.
-
-Users of other package installation tools, such as Pip or Conda, need to
-install the [Parasail](https://github.com/jeffdaily/parasail) library following
-the instructions on the Parasail web page. Once that is done, the Python
-dependencies can be installed using the appropriate command for your package
-manager. For pip, for example, this can be done with
-```bash
-  pip install -r requirements.txt
-```
-
-Once that is done, activate your virtual environment, and install this package
-via
-```bash
   pip install -e .
 ```
 
@@ -137,6 +138,36 @@ run:
   docker run -it -v $PWD:/data -t vpsearch-image vpsearch query /data/database.db /data/query.fasta
 ```
 
+### From source
+
+For platforms where no binary wheel is available, or in order to contribute to
+the codebase, it is necessary to install the package from source. To do so, you
+will need a C and C++ compiler with support for the AVX2 and AVX512 instruction
+sets (version 4.9.2 and up of the gcc/g++ compiler will do).
+
+First, install the [Parasail](https://github.com/jeffdaily/parasail) package
+from source. Please see that repository for instructions on how to do so. By
+default, Parasail is installed under `/usr/local`. If you choose a different
+install location, see the "Troubleshooting" section below for instructions on
+how to make vpsearch aware of where Parasail is located.
+
+Once Parasail has been installed, install the requirements for this package in
+your Python environment:
+```console
+  python -m pip install -r requirements.txt
+```
+
+Last, install this package in editable mode:
+```console
+  python -m pip install -e .
+```
+
+If all steps have completed successfully, you are ready to use vpsearch! To
+verify that everything works as expected, you can run the unit test suite via
+```console
+  python -m unittest discover -v vpsearch
+```
+
 ### Troubleshooting
 
 The vpsearch package relies on the Parasail C library for alignment. If
@@ -161,6 +192,18 @@ arrays that are easy to serialize and fast to look up. The object that
 represents the linearized tree can only query the database, not build the tree.
 The slower tree-of-nodes implementation can build and query (albeit with more
 overhead).
+
+vpsearch is best suited for indexing sets of small-ish marker genes, such as
+the bacterial 16S rRNA gene or the fungal ITS region (100s-1000s of basepairs),
+and has been tested with databases of hundreds of thousands of sequences. In
+general, vpsearch is able to construct the tree using (on average) `O(n log n)`
+sequence comparisons and uses `O(n)` memory to do so, where `n` is the number
+of sequences in the database. Each sequence comparison involves a global
+sequence alignment, which scales quadratically with the length of the sequence.
+For short sequences this can be done quickly and efficiently, but for longer
+sequences (e.g. full length viral or bacterial genomes), the total runtime and
+memory usage can be considerable.  If you are interested in using vpsearch
+under these conditions, please open an issue!
 
 ## Building wheels
 
