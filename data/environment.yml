@@ -1,8 +1,10 @@
-name: primer-trimming
+name: vpsearch-data
 channels:
   - conda-forge
   - bioconda
   - defaults
 dependencies:
+  - python=3.10.4
   - biopython=1.79
   - rdptools=2.0.3
+  - snakemake=7.3.8
