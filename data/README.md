@@ -64,7 +64,7 @@ conda env create -f environment.yml
 
 Once the environment has been installed, activate it via
 ```console
-conda activate primer-trimming
+conda activate vpsearch-data
 ```
 
 ### Processing the sequences
