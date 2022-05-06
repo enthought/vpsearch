@@ -1,0 +1,8 @@
+The original GTDB database is available under a Creative Commons license ([CC
+BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)). The database
+bac120_ssu_reps_r207-sliced-dedup.fa.gz that is provided with this repository
+was derived from GTDB according to the steps described in the README, and is
+therefore licensed under the same terms (CC BY-SA 4.0).
+
+All other files in this directory fall under the original license in the root
+of this repository.

@@ -1,8 +1,16 @@
+# Build artifacts
 wheelhouse/
 build/
 vpsearch.egg-info/
 vpsearch/_vpsearch.cpp
 vpsearch/_vpsearch.*.so
+
+# Sequence data
+data/.snakemake
+data/bac120_ssu_reps_r207-sliced-dedup.fa
+data/bac120_ssu_reps_r207-sliced.fa
+data/bac120_ssu_reps_r207.fna
+data/primer-locs.tsv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
