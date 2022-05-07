@@ -126,8 +126,9 @@ sequence.
 
 # Acknowledgements
 
-We would like to thank Jun Isayama and Yuko Kiridoshi for stimulating
-discussions, and Homin Park for help in setting up the computational
-infrastructure that was used for the case study.
+We would like to thank Peter Zahemszky, for fixing a bug in the computation of
+the score for sequences with ambiguous nucleotides, as well as Jun Isayama and
+Yuko Kiridoshi for stimulating discussions, and Homin Park for help in setting
+up the computational infrastructure that was used for the case study.
 
 # References
