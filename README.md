@@ -13,6 +13,100 @@ Vantage-point tree search uses global-to-global alignment to compare sequences,
 rather than seed-and-extend approximative methods as used for example by
 BLAST.
 
+## Installation and getting started
+
+### Using wheels (recommended)
+
+The vpsearch package is available from the Python Package Index (PyPI) and can
+be installed using `pip` as follows:
+```console
+  python -m pip install vpsearch
+```
+
+On supported platforms (Linux, Intel macOS), this will install a binary wheel
+that includes the Parasail dependency. On other platforms, vpsearch can be
+installed from source, and instructions on how to do so can be found below.
+
+Users of Apple Silicon should compile the package from scratch using the
+instructions below. Note that vpsearch depends on Parasail, a library for fast
+alignment using Intel-specific SIMD instruction sets. These are not supported
+on Apple Silicon and even though vpsearch can be made to run on this platform,
+it will be slow.
+
+### Using EDM
+
+Users of the [Enthought Deployment Manager(EDM)](https://www.enthought.com/enthought-deployment-manager/)
+can install the necessary prerequisites (Click, Cython, Numpy, and Parasail) by
+importing an EDM environment from the bundle file shipped with this repository
+
+```bash
+  edm env import -f <bundle.json> vpsearch
+```
+where `<bundle.json>` is one of `vpsearch_py3.8_osx-x86_64.json` or
+`vpsearch_py3.8_rh7-x86_64.json`, depending on your platform.
+
+When this is done, activate the environment, and install this package. From the
+root of this repository, run
+```bash
+  edm shell -e vpsearch
+  pip install -e .
+```
+
+### Using Docker
+
+It is possible to build a Docker image that contains vpsearch as well as all of
+its dependencies. This is useful, for example, when integrating vpsearch into a
+workflow manager, like Snakemake, CWL, or WDL.
+
+To build the image, run the following command from the root of this repository:
+```bash
+  docker build . -t vpsearch-image
+```
+
+Once the image has been built, vpsearch can then be run from within a
+container. Assuming you have a FASTA file of target sequences in the file
+`database.fasta` in the current directory, run the following to build a
+vpsearch index:
+```bash
+  docker run -it -v $PWD:/data -t vpsearch-image vpsearch build /data/database.fasta
+```
+
+To query the index for a given FASTA file `query.fasta` of query sequences,
+run:
+```bash
+  docker run -it -v $PWD:/data -t vpsearch-image vpsearch query /data/database.db /data/query.fasta
+```
+
+### From source (development environment)
+
+For platforms where no binary wheel is available, or in order to contribute to
+the codebase, it is necessary to install the package from source. To do so, you
+will need a C and C++ compiler with support for the AVX2 and AVX512 instruction
+sets (version 4.9.2 and up of the gcc/g++ compiler will do).
+
+First, install the [Parasail](https://github.com/jeffdaily/parasail) package
+from source. Please see that repository for instructions on how to do so. By
+default, Parasail is installed under `/usr/local`. If you choose a different
+install location, see the "Troubleshooting" section below for instructions on
+how to make vpsearch aware of where Parasail is located.
+
+Once Parasail has been installed, install the requirements for this package in
+your Python environment:
+```console
+  python -m pip install -r requirements.txt
+```
+
+Last, install this package in editable mode:
+```console
+  python -m pip install -e .
+```
+
+If all steps have completed successfully, you are ready to use vpsearch! To
+verify that everything works as expected, you can run the unit test suite via
+```console
+  python -m unittest discover -v vpsearch
+```
+
 ## Usage
 
 Given a sequence database (in FASTA format), `vpsearch build` constructs an
@@ -78,101 +172,13 @@ Note that the number of mismatches and gap openings are currently not displayed
 in the result output. This will be addressed in a future version of the
 package.
 
-## Installation
+## Reporting issues and contributing
 
-### Using wheels
+We welcome bug fixes and improvements to vpsearch, as well as larger contributions. We encourage you to [open an issue](https://github.com/enthought/vpsearch/issues/new) to keep track of bugs, improvements, and so on.
 
-The vpsearch package is available from the Python Package Index (PyPI) and can
-be installed using `pip` as follows:
-```console
-  python -m pip install vpsearch
-```
+If you are interested in contributing to vpsearch, see our [guide for contributors](CONTRIBUTING.md).
 
-On supported platforms (Linux, Intel macOS), this will install a binary wheel
-that includes the Parasail dependency. On other platforms, vpsearch can be
-installed from source, and instructions on how to do so can be found below.
-
-Users of Apple Silicon should compile the package from scratch using the
-instructions below. Note that vpsearch depends on Parasail, a library for fast
-alignment using Intel-specific SIMD instruction sets. These are not supported
-on Apple Silicon and even though vpsearch can be made to run on this platform,
-it will be slow.
-
-### Using EDM
-
-Users of the [Enthought Deployment Manager(EDM)](https://www.enthought.com/enthought-deployment-manager/)
-can install the necessary prerequisites (Click, Cython, Numpy, and Parasail) by
-importing an EDM environment from the bundle file shipped with this repository
-
-```bash
-  edm env import -f <bundle.json> vpsearch
-```
-where `<bundle.json>` is one of `vpsearch_py3.8_osx-x86_64.json` or
-`vpsearch_py3.8_rh7-x86_64.json`, depending on your platform.
-
-When this is done, activate the environment, and install this package. From the
-root of this repository, run
-```bash
-  edm shell -e vpsearch
-  pip install -e .
-```
-
-### Using Docker
-
-It is possible to build a Docker image that contains vpsearch as well as all of
-its dependencies. This is useful, for example, when integrating vpsearch into a
-workflow manager, like Snakemake, CWL, or WDL.
-
-To build the image, run the following command from the root of this repository:
-```bash
-  docker build . -t vpsearch-image
-```
-
-Once the image has been built, vpsearch can then be run from within a
-container. Assuming you have a FASTA file of target sequences in the file
-`database.fasta` in the current directory, run the following to build a
-vpsearch index:
-```bash
-  docker run -it -v $PWD:/data -t vpsearch-image vpsearch build /data/database.fasta
-```
-
-To query the index for a given FASTA file `query.fasta` of query sequences,
-run:
-```bash
-  docker run -it -v $PWD:/data -t vpsearch-image vpsearch query /data/database.db /data/query.fasta
-```
-
-### From source
-
-For platforms where no binary wheel is available, or in order to contribute to
-the codebase, it is necessary to install the package from source. To do so, you
-will need a C and C++ compiler with support for the AVX2 and AVX512 instruction
-sets (version 4.9.2 and up of the gcc/g++ compiler will do).
-
-First, install the [Parasail](https://github.com/jeffdaily/parasail) package
-from source. Please see that repository for instructions on how to do so. By
-default, Parasail is installed under `/usr/local`. If you choose a different
-install location, see the "Troubleshooting" section below for instructions on
-how to make vpsearch aware of where Parasail is located.
-
-Once Parasail has been installed, install the requirements for this package in
-your Python environment:
-```console
-  python -m pip install -r requirements.txt
-```
-
-Last, install this package in editable mode:
-```console
-  python -m pip install -e .
-```
-
-If all steps have completed successfully, you are ready to use vpsearch! To
-verify that everything works as expected, you can run the unit test suite via
-```console
-  python -m unittest discover -v vpsearch
-```
-
-### Troubleshooting
+## Troubleshooting
 
 The vpsearch package relies on the Parasail C library for alignment. If
 building the package fails because the Parasail library cannot be found, you
