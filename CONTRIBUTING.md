@@ -26,4 +26,4 @@ Once you have an open PR, we will try to review it within a reasonable timeframe
 
 ## Contributor code of conduct
 
-Our Code of Conduct can be found [here](CONDUCT.md) and has been adapted from the [Contributor Covenant (version 2.1)](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
+Our Code of Conduct can be found [here](CODE_OF_CONDUCT.md) and has been adapted from the [Contributor Covenant (version 2.1)](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
