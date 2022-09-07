@@ -238,7 +238,7 @@ other Python versions can be built.
 
 ## License
 
-This package is licensed under the [BSD license](LICENSE.txt).
+This package is licensed under the [3-clause BSD license](LICENSE.txt).
 
 ## References
 
