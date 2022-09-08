@@ -14,18 +14,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Cache EDM packages
-      uses: actions/cache@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
       with:
-        path: ~/.cache
-        key: ${{ runner.os }}--${{ hashFiles('requirements.txt') }}
-    - name: Setup EDM
-      uses: enthought/setup-edm-action@v1
-      with:
-        edm-version: 3.2.5
-    - name: Install CI dependencies
-      run: edm install -y click
-    - name: Install development environment
-      run: edm run -- python -m ci build-devenv
-    - name: Run vpsearch tests
-      run: edm run -- python -m ci run-tests
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies and local packages
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install . -v
+    - name: Create clean test directory
+      run: |
+        mkdir testdir
+    - name: Test vpsearch package
+      working-directory: testdir
+      run: python -m unittest discover -v vpsearch
