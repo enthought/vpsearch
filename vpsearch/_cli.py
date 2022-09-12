@@ -28,8 +28,15 @@ def main():
 
 @main.command()
 @click.argument('sequences')
-@click.option('-o', '--output')
-@click.option('-f', '--force', is_flag=True)
+@click.option('-o', '--output',
+              help=("Directory where the sequence database will be written. "
+                    "If not set, the name of the sequence input file will be "
+                    "used, with the extension '.db'."))
+@click.option('-f', '--force', is_flag=True,
+              help=("Whether to silently overwrite the sequence database, "
+                    "if it already exists. If this option is not set (the "
+                    "default), vpsearch will ask for confirmation before "
+                    "overwriting the database."))
 def build(sequences, output, force):
     """ Build a database of sequences.
     """
@@ -61,11 +68,15 @@ def build(sequences, output, force):
 @main.command()
 @click.argument('database')
 @click.argument('query')
-@click.option('-n', '--number', default=4)
+@click.option('-n', '--number', default=4,
+              help=("Number of database results to return for each "
+                    "query sequence."),
+              show_default=True)
 @click.option('-j', '--num-threads', default=1,
               help=("Number of threads to use for parallel lookup. "
                     "The default is to use 1 thread, i.e. to do the "
-                    "lookup serially."))
+                    "lookup serially."),
+              show_default=True)
 def query(database, query, number, num_threads):
     """ Query a built database for sequences.
     """
