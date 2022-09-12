@@ -33,25 +33,6 @@ alignment using Intel-specific SIMD instruction sets. These are not supported
 on Apple Silicon and even though vpsearch can be made to run on this platform,
 it will be slow.
 
-### Using EDM
-
-Users of the [Enthought Deployment Manager(EDM)](https://www.enthought.com/enthought-deployment-manager/)
-can install the necessary prerequisites (Click, Cython, Numpy, and Parasail) by
-importing an EDM environment from the bundle file shipped with this repository
-
-```bash
-  edm env import -f <bundle.json> vpsearch
-```
-where `<bundle.json>` is one of `vpsearch_py3.8_osx-x86_64.json` or
-`vpsearch_py3.8_rh7-x86_64.json`, depending on your platform.
-
-When this is done, activate the environment, and install this package. From the
-root of this repository, run
-```bash
-  edm shell -e vpsearch
-  pip install -e .
-```
-
 ### Using Docker
 
 It is possible to build a Docker image that contains vpsearch as well as all of
@@ -82,27 +63,17 @@ run:
 For platforms where no binary wheel is available, or in order to contribute to
 the codebase, it is necessary to install the package from source. To do so, you
 will need a C and C++ compiler with support for the AVX2 and AVX512 instruction
-sets (version 4.9.2 and up of the gcc/g++ compiler will do).
+sets (on Linux, version 4.9.2 and up of the gcc/g++ compiler will do, while on
+macOS any recent version of clang is sufficient).
 
-First, install the [Parasail](https://github.com/jeffdaily/parasail) package
-from source. Please see that repository for instructions on how to do so. By
-default, Parasail is installed under `/usr/local`. If you choose a different
-install location, see the "Troubleshooting" section below for instructions on
-how to make vpsearch aware of where Parasail is located.
-
-Once Parasail has been installed, install the requirements for this package in
-your Python environment:
-```console
-  python -m pip install -r requirements.txt
-```
-
-Last, install this package in editable mode:
+Using pip, the package can be installed in development mode in your Python
+environment in the normal way:
 ```console
   python -m pip install -e .
 ```
 
-If all steps have completed successfully, you are ready to use vpsearch! To
-verify that everything works as expected, you can run the unit test suite via
+To verify that everything works as expected, you can run the unit test suite
+via
 ```console
   python -m unittest discover -v vpsearch
 ```
@@ -178,21 +149,6 @@ We welcome bug fixes and improvements to vpsearch, as well as larger contributio
 
 If you are interested in contributing to vpsearch, see our [guide for contributors](CONTRIBUTING.md).
 
-## Troubleshooting
-
-The vpsearch package relies on the Parasail C library for alignment. If
-building the package fails because the Parasail library cannot be found, you
-can manually specify the location of the Parasail include files and shared
-object libraries by setting the `PARASAIL_INCLUDE_DIR` and `PARASAIL_LIB_DIR`
-environment variables before building the package:
-```bash
-  export PARASAIL_INCLUDE_DIR=/location/of/parasail/include/files
-  export PARASAIL_LIB_DIR=/location/of/parasail/lib/files
-  pip install -e .
-```
-Note that if Parasail is installed in a non-standard location, you may have to
-set the `LD_LIBRARY_PATH` variable at runtime.
-
 ## Implementation notes
 
 The tree construction operates in two phases. We first build the tree as a tree
@@ -230,7 +186,6 @@ the tool, followed by e.g.
 ```bash
   CIBW_BUILD_VERBOSITY=1 \
   CIBW_BUILD=cp38-manylinux_x86_64 \
-  CIBW_BEFORE_BUILD="./ci/build-parasail.sh" \
   python -m cibuildwheel --output-dir wheelhouse --platform linux
 ```
 to build Python 3.8 wheels for Linux. By varying the build tag, wheels for
