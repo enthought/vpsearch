@@ -3,6 +3,6 @@ requires = [
     "setuptools<65.2",
     "wheel",
     "Cython>=0.28.5",
-    "parasail>=1.3.3",
+    "parasail==1.3.3",
     "oldest-supported-numpy",  # https://github.com/scipy/oldest-supported-numpy
 ]

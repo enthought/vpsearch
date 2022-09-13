@@ -78,7 +78,9 @@ setup(
     install_requires=[
         "click",
         "numpy",
-        "parasail",
+        # Pin Parasail to a specific version. See
+        # https://github.com/enthought/vpsearch/pull/37 for more information.
+        "parasail==1.3.3",
     ],
     packages=find_packages(),
 )
