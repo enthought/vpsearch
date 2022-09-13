@@ -61,8 +61,6 @@ setup(
             include_dirs=[np.get_include(),
                           parasail.get_include(),
                           'vpsearch'],
-            library_dirs=[os.path.dirname(parasail.get_library())],
-            libraries=['parasail'],
             language='c++',
             extra_compile_args=CPP_BASE_ARGS + ['-std=c++11'],
             extra_link_args=CPP_BASE_ARGS + LINK_ARGS,
