@@ -82,5 +82,11 @@ setup(
         # https://github.com/enthought/vpsearch/pull/37 for more information.
         "parasail==1.3.3",
     ],
+    extras_require={
+        "docs": [
+            "sphinx",
+            "enthought-sphinx-theme",
+        ]
+    },
     packages=find_packages(),
 )
