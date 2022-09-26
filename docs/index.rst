@@ -10,8 +10,18 @@ Welcome to VPSearch's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   installation.rst
+   usage.rst
+   contributing.rst
+   implementation.rst
+   wheels.rst
+   references.rst
 
+.. toctree::
+   :maxdepth: 1
 
+   code_of_conduct.rst
+              
 Indices and tables
 ==================
 
