@@ -21,7 +21,7 @@ VPsearch can be installed and updated through pip:
 ```
 
 This will install a standalone command-line utility `vpsearch` into your
-environment, which can be used to build and query a sequence database. For more information on how to do so, see the [documentation](docs).
+environment, which can be used to build and query a sequence database. For more information on how to do so, see the [documentation](https://vpsearch.readthedocs.io/en/latest/).
 
 ## License
 
