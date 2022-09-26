@@ -7,21 +7,9 @@ from distutils.core import setup
 from distutils.extension import Extension
 
 import numpy as np
+import parasail
+
 from Cython.Build import cythonize
-
-
-def parasail_get_include():
-    try:
-        return os.environ['PARASAIL_INCLUDE_DIR']
-    except KeyError:
-        return os.path.join(sys.prefix, "include")
-
-
-def parasail_get_lib():
-    try:
-        return os.environ['PARASAIL_LIBRARY_DIR']
-    except KeyError:
-        return os.path.join(sys.prefix, "lib")
 
 
 def get_long_description():
@@ -71,10 +59,8 @@ setup(
             'vpsearch._vpsearch',
             sources=['vpsearch/_vpsearch.pyx'],
             include_dirs=[np.get_include(),
-                          parasail_get_include(),
+                          parasail.get_include(),
                           'vpsearch'],
-            library_dirs=[parasail_get_lib()],
-            libraries=['parasail'],
             language='c++',
             extra_compile_args=CPP_BASE_ARGS + ['-std=c++11'],
             extra_link_args=CPP_BASE_ARGS + LINK_ARGS,
@@ -92,6 +78,9 @@ setup(
     install_requires=[
         "click",
         "numpy",
+        # Pin Parasail to a specific version. See
+        # https://github.com/enthought/vpsearch/pull/37 for more information.
+        "parasail==1.3.3",
     ],
     packages=find_packages(),
 )
