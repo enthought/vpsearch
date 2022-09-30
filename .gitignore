@@ -4,6 +4,7 @@ build/
 vpsearch.egg-info/
 vpsearch/_vpsearch.cpp
 vpsearch/_vpsearch.*.so
+docs/_build
 
 # Sequence data
 data/.snakemake
