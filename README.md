@@ -2,6 +2,9 @@
 vpsearch - Fast Vantage-Point Tree Search for Sequence Databases
 ----------------------------------------------------------------
 
+[![PyPI version](https://badge.fury.io/py/vpsearch.svg)](https://badge.fury.io/py/vpsearch)
+![Tests status](https://github.com/enthought/vpsearch/actions/workflows/run-tests.yaml/badge.svg?event=push)
+
 This is a package for indexing and querying a sequence database for fast
 nearest-neighbor search by means of [vantage point
 trees](https://en.wikipedia.org/wiki/Vantage-point_tree). For reasonably large
